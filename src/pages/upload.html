@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create NFT - InnoArt Marketplace</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../assets/images/logo.png" alt="InnoArt Logo">
+                <h1>InnoArt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html" class="active">Create</a></li>
+                    <li><a href="artist-register.html">Become an Artist</a></li>
+                    <li><button id="connectWalletBtn">Connect Wallet</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="upload-main">
+        <section class="upload-form-section">
+            <div class="container">
+                <h2>Create Your NFT</h2>
+                <div class="upload-form-container">
+                    <form id="nftUploadForm">
+                        <div class="form-group">
+                            <label for="nftImage">Upload Artwork</label>
+                            <div class="image-upload-container">
+                                <div class="image-preview" id="imagePreview">
+                                    <img id="previewImage" src="#" alt="Preview" style="display: none;">
+                                    <div class="upload-instructions">
+                                        <img src="../assets/images/upload-icon.png" alt="Upload">
+                                        <p>Drag & drop your artwork here or click to browse</p>
+                                        <p class="small">Recommended: PNG, JPG, GIF (Max 10MB)</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="nftImage" accept="image/*" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nftTitle">Artwork Title</label>
+                            <input type="text" id="nftTitle" placeholder="e.g., Digital Dreams" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nftDescription">Description</label>
+                            <textarea id="nftDescription" placeholder="Tell the story behind your artwork..." rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nftPrice">Price (ETH)</label>
+                            <input type="number" id="nftPrice" min="0.01" step="0.01" placeholder="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nftRoyalty">Royalty Percentage (for future sales)</label>
+                            <input type="number" id="nftRoyalty" min="0" max="20" value="10" disabled>
+                            <p class="note">Note: Platform takes 20% on first sale, you set royalty for future resales</p>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" id="previewBtn">Preview</button>
+                            <button type="submit" id="createNftBtn">Create NFT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client@50.1.2/dist/index.min.js"></script>
+    <script src="../js/web3.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/upload.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnoArt - Digital Art NFT Marketplace</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="assets/images/logo.png" alt="InnoArt Logo">
+                <h1>InnoArt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create</a></li>
+                    <li><a href="artist-register.html">Become an Artist</a></li>
+                    <li><button id="connectWalletBtn">Connect Wallet</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Discover & Collect Unique Digital Art</h2>
+                    <p>InnoArt brings together artists and collectors on the Ethereum blockchain. Own a piece of digital history.</p>
+                    <div class="cta-buttons">
+                        <a href="gallery.html" class="btn-primary">Explore Art</a>
+                        <a href="artist-register.html" class="btn-secondary">Start Creating</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="nft-preview">
+                        <img src="assets/images/hero-nft.png" alt="Featured NFT">
+                        <div class="nft-badge">Featured Art</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-artists">
+            <div class="container">
+                <h2>Featured Artists</h2>
+                <div class="artist-grid" id="featuredArtists">
+                    <!-- Dynamically loaded from contract -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/images/logo.png" alt="InnoArt Logo">
+                    <h3>InnoArt</h3>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="gallery.html">Browse Art</a></li>
+                        <li><a href="upload.html">Create NFT</a></li>
+                        <li><a href="artist-register.html">Join as Artist</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Connect With Us</h4>
+                    <div class="social-icons">
+                        <a href="#"><img src="assets/images/twitter-icon.png" alt="Twitter"></a>
+                        <a href="#"><img src="assets/images/instagram-icon.png" alt="Instagram"></a>
+                        <a href="#"><img src="assets/images/discord-icon.png" alt="Discord"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 InnoArt NFT Marketplace. All rights reserved.</p>
+                <p>&copy; @llakterian</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

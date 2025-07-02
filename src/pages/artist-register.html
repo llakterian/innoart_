@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become an Artist - InnoArt Marketplace</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <img src="../assets/images/logo.png" alt="InnoArt Logo">
+                <h1>InnoArt</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create</a></li>
+                    <li><a href="artist-register.html" class="active">Become an Artist</a></li>
+                    <li><button id="connectWalletBtn">Connect Wallet</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="artist-register-main">
+        <section class="artist-register-section">
+            <div class="container">
+                <div class="register-container">
+                    <div class="register-info">
+                        <h2>Join Our Community of Digital Artists</h2>
+                        <p>As a registered InnoArt artist, you'll gain access to:</p>
+                        <ul>
+                            <li>Mint and sell your digital creations as NFTs</li>
+                            <li>Receive 80% of primary sales (20% platform fee)</li>
+                            <li>Set your own royalty percentage for secondary sales</li>
+                            <li>Featured spots in our artist showcase</li>
+                            <li>Access to our artist community and resources</li>
+                        </ul>
+                        <div class="artist-showcase">
+                            <h3>Featured Artists</h3>
+                            <div class="artist-grid">
+                                <div class="artist-card">
+                                    <img src="../assets/images/artist1.png" alt="Artist 1">
+                                    <h4>@DigitalPainter</h4>
+                                    <p>45 NFTs sold</p>
+                                </div>
+                                <div class="artist-card">
+                                    <img src="../assets/images/artist2.png" alt="Artist 2">
+                                    <h4>@CryptoCreator</h4>
+                                    <p>32 NFTs sold</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="register-form">
+                        <h3>Artist Registration</h3>
+                        <div class="registration-steps">
+                            <div class="step active">1. Connect Wallet</div>
+                            <div class="step">2. Pay Registration</div>
+                            <div class="step">3. Complete Profile</div>
+                        </div>
+
+                        <div id="walletConnectStep">
+                            <p>First, connect your MetaMask wallet to proceed with registration.</p>
+                            <button id="registerConnectBtn" class="btn-metamask">
+                                <img src="../assets/images/metamask-icon.png" alt="MetaMask">
+                                Connect MetaMask
+                            </button>
+                        </div>
+
+                        <div id="paymentStep" style="display: none;">
+                            <div class="payment-info">
+                                <p>Registration Fee: <span id="registrationFee">0.01</span> ETH</p>
+                                <p>This is a one-time fee to join the platform as a verified artist.</p>
+                            </div>
+                            <button id="payRegistrationBtn" class="btn-primary">
+                                Pay Registration Fee
+                            </button>
+                        </div>
+
+                        <div id="profileStep" style="display: none;">
+                            <form id="artistProfileForm">
+                                <div class="form-group">
+                                    <label for="artistName">Artist Name</label>
+                                    <input type="text" id="artistName" placeholder="How you want to be displayed" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="artistBio">Bio</label>
+                                    <textarea id="artistBio" placeholder="Tell us about yourself and your art..." rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="artistSocial">Social Media (Optional)</label>
+                                    <input type="text" id="artistSocial" placeholder="e.g., twitter.com/yourhandle">
+                                </div>
+                                <div class="form-group">
+                                    <label for="artistAvatar">Profile Picture</label>
+                                    <input type="file" id="artistAvatar" accept="image/*">
+                                </div>
+                                <button type="submit" class="btn-primary">Complete Registration</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!-- Same footer as index.html -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="../js/web3.js"></script>
+    <script src="../js/artist-register.js"></script>
+</body>
+</html>
