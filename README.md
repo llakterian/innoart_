@@ -1,66 +1,50 @@
-## Foundry
+# InnoArt NFT Marketplace
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+![InnoArt Banner](src/assets/images/hero-nft.png)
 
-Foundry consists of:
+A decentralized NFT marketplace for digital artists to mint, showcase, and sell their artwork with transparent royalty distribution.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## 🌟 Features
 
-## Documentation
+- **Artist-Centric Platform**:
+  - 80% revenue to artists, 20% platform fee
+  - One-time registration for creators
+  - Customizable artist profiles
 
-https://book.getfoundry.sh/
+- **Secure & Transparent**:
+  - Ethereum blockchain-powered
+  - MetaMask wallet integration
+  - Smart contract royalties on resales
 
-## Usage
+- **User-Friendly**:
+  - Responsive web interface
+  - Blurred previews for unowned NFTs
+  - Simple NFT minting workflow
 
-### Build
+## 📦 Tech Stack
 
-```shell
-$ forge build
-```
+**Frontend**:
+- HTML5, CSS3, JavaScript
+- Web3.js (Ethereum integration)
 
-### Test
+**Backend**:
+- Solidity (Smart Contracts)
+- IPFS (Decentralized storage)
 
-```shell
-$ forge test
-```
+**Tools**:
+- Foundry (Contract testing)
+- GitHub Pages (Hosting)
+- MetaMask (Wallet)
 
-### Format
+## 🚀 Quick Start
 
-```shell
-$ forge fmt
-```
+### Prerequisites
+- Node.js (v16+)
+- MetaMask browser extension
+- Git
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+### Local Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/llakterian/innoart-marketplace.git
+   cd innoart-marketplace
