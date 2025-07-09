@@ -46,5 +46,5 @@ A decentralized NFT marketplace for digital artists to mint, showcase, and sell 
 ### Local Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/llakterian/innoart-marketplace.git
-   cd innoart-marketplace
+   git clone https://github.com/llakterian/innoart_.git
+   cd innoart_
