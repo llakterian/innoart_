@@ -1,0 +1,28 @@
+{
+  "name": "innoart-nft",
+  "version": "1.0.0",
+  "description": "![InnoArt Banner](src/assets/images/hero-nft.png)",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.0.12",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/web3": "^1.2.2",
+    "nft.storage": "^7.2.0",
+    "web3": "^4.16.0"
+  }
+}
