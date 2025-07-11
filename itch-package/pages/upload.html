@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create NFT - InnArt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/global.css">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .upload-main {
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .upload-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .upload-section h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .upload-section > p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 3rem;
+        }
+
+        .upload-form {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-dark);
+        }
+
+        .image-preview {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .image-preview:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .upload-placeholder {
+            text-align: center;
+            color: var(--text-dark);
+        }
+
+        .upload-placeholder svg {
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .upload-placeholder p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-placeholder small {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        #previewImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        #nftImage {
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-primary {
+            min-width: 200px;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .royalty-section {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .royalty-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .royalty-section p {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .royalty-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .royalty-input input {
+            width: 80px;
+            text-align: center;
+        }
+
+        .category-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .category-option {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .category-option:hover,
+        .category-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text-light);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .upload-section {
+                padding: 1rem;
+            }
+            
+            .upload-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="../index.html" style="color: inherit; text-decoration: none;">InnArt</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="upload.html" class="active">Create</a></li>
+                <li><a href="artist-register.html">Artists</a></li>
+                <li><a href="#profile">Profile</a></li>
+            </ul>
+            <button class="btn btn-primary" id="connectWallet">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <main class="upload-main">
+        <div class="container">
+            <section class="upload-section">
+                <h1>Create Your NFT</h1>
+                <p>Transform your digital artwork into a unique NFT and join the blockchain revolution</p>
+                
+                <form id="nftUploadForm" class="upload-form">
+                    <div class="form-group">
+                        <label for="nftImage">Upload Artwork *</label>
+                        <div id="imagePreview" class="image-preview">
+                            <img id="previewImage" style="display: none;" alt="Preview">
+                            <div class="upload-placeholder">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21,15 16,10 5,21"/>
+                                </svg>
+                                <p>Drag and drop or click to upload</p>
+                                <small>PNG, JPG, GIF up to 10MB</small>
+                            </div>
+                        </div>
+                        <input type="file" id="nftImage" name="nftImage" accept="image/*" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nftTitle">Title *</label>
+                            <input type="text" id="nftTitle" name="nftTitle" placeholder="Enter NFT title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nftPrice">Price (ETH) *</label>
+                            <input type="number" id="nftPrice" name="nftPrice" step="0.001" min="0" placeholder="0.001" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nftDescription">Description</label>
+                        <textarea id="nftDescription" name="nftDescription" placeholder="Tell the story behind your artwork..." rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <div class="category-selector">
+                            <button type="button" class="category-option" data-category="art">Art</button>
+                            <button type="button" class="category-option" data-category="photography">Photography</button>
+                            <button type="button" class="category-option" data-category="digital">Digital</button>
+                            <button type="button" class="category-option" data-category="abstract">Abstract</button>
+                            <button type="button" class="category-option" data-category="3d">3D</button>
+                            <button type="button" class="category-option" data-category="other">Other</button>
+                        </div>
+                    </div>
+
+                    <div class="royalty-section">
+                        <h3>💰 Royalty Settings</h3>
+                        <p>Set the percentage you'll earn from future sales of this NFT</p>
+                        <div class="royalty-input">
+                            <input type="number" id="royaltyPercentage" min="0" max="10" value="5" placeholder="5">
+                            <span>% royalty on resales</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar" id="uploadProgress">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Create NFT</span>
+                            <span class="btn-loading" style="display: none;">
+                                <div class="loading-spinner" style="width: 20px; height: 20px;"></div>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/style-guardian.js"></script>
+    <script src="../js/web3-handler.js"></script>
+    <script src="../js/upload.js"></script>
+</body>
+</html>
