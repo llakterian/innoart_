@@ -7,7 +7,7 @@
     "checkJs": false,
     "declaration": false,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -17,7 +17,8 @@
     "noEmit": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "components/**/*"
   ],
   "exclude": [
     "node_modules",

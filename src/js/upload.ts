@@ -1,186 +1,240 @@
-import { NFTStorage } from 'nft.storage';
+import { Web3Handler } from './web3';
+import { NFTStorage, File } from 'nft.storage';
 
-// Import necessary functions
-declare function getContract(): Promise<any>;
-declare function showErrorToUser(error: Error): void;
-declare function showSuccessMessage(message: string): void;
-declare let account: string | null;
-declare let web3: any;
-
-interface NFTMetadata {
-  name: string;
-  description: string;
-  image: string;
-  attributes?: Array<{
-    trait_type: string;
-    value: string;
-  }>;
-}
-
-class NFTUploader {
-  private form: HTMLFormElement;
-  private imagePreview: HTMLElement;
-  private previewImage: HTMLImageElement;
+export class NFTUploader {
+  private web3Handler: Web3Handler;
+  private nftStorage: NFTStorage;
+  private isUploading: boolean = false;
 
   constructor() {
-    this.form = document.getElementById('nftUploadForm') as HTMLFormElement;
-    this.imagePreview = document.getElementById('imagePreview') as HTMLElement;
-    this.previewImage = document.getElementById('previewImage') as HTMLImageElement;
-    
+    this.web3Handler = Web3Handler.getInstance();
+    this.nftStorage = new NFTStorage({ token: (import.meta as any).env?.VITE_NFT_STORAGE_API_KEY || '' });
     this.initEventListeners();
   }
 
-  private initEventListeners() {
+  private initEventListeners(): void {
     const imageUpload = document.getElementById('nftImage') as HTMLInputElement;
-    imageUpload?.addEventListener('change', this.handleImageUpload.bind(this));
+    const imagePreview = document.getElementById('imagePreview') as HTMLElement;
     
-    this.imagePreview?.addEventListener('dragover', this.handleDragOver.bind(this));
-    this.imagePreview?.addEventListener('dragleave', this.handleDragLeave.bind(this));
-    this.imagePreview?.addEventListener('drop', this.handleDrop.bind(this));
+    imageUpload?.addEventListener('change', (e) => this.handleImageUpload(e));
+    imagePreview?.addEventListener('dragover', (e) => this.handleDragOver(e));
+    imagePreview?.addEventListener('dragleave', () => this.handleDragLeave());
+    imagePreview?.addEventListener('drop', (e) => this.handleDrop(e));
     
-    this.form?.addEventListener('submit', this.handleFormSubmit.bind(this));
+    document.getElementById('nftUploadForm')?.addEventListener('submit', (e) => this.handleSubmit(e));
   }
 
-  private handleImageUpload(event: Event) {
+  private handleImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    if (file) {
+    if (file && this.isValidImageType(file)) {
       this.displayImagePreview(file);
+    } else {
+      this.showError('Please upload a PNG, JPG, or GIF file');
     }
   }
 
-  private handleDragOver(event: DragEvent) {
+  private handleDragOver(event: DragEvent): void {
     event.preventDefault();
-    this.imagePreview.classList.add('drag-over');
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview?.classList.add('dragover');
   }
 
-  private handleDragLeave(event: DragEvent) {
-    event.preventDefault();
-    this.imagePreview.classList.remove('drag-over');
+  private handleDragLeave(): void {
+    const imagePreview = document.getElementById('imagePreview');
+    imagePreview?.classList.remove('dragover');
   }
 
-  private handleDrop(event: DragEvent) {
+  private handleDrop(event: DragEvent): void {
     event.preventDefault();
-    this.imagePreview.classList.remove('drag-over');
+    this.handleDragLeave();
     
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
-      this.displayImagePreview(files[0]);
+      const file = files[0];
+      if (this.isValidImageType(file)) {
+        this.displayImagePreview(file);
+        const input = document.getElementById('nftImage') as HTMLInputElement;
+        if (input) {
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          input.files = dataTransfer.files;
+        }
+      } else {
+        this.showError('Please upload a PNG, JPG, or GIF file');
+      }
     }
   }
 
-  private displayImagePreview(file: File) {
+  private isValidImageType(file: File): boolean {
+    const validTypes = ['image/png', 'image/jpeg', 'image/gif'];
+    return validTypes.includes(file.type);
+  }
+
+  private displayImagePreview(file: File): void {
     const reader = new FileReader();
+    const previewImage = document.getElementById('previewImage') as HTMLImageElement;
+    const uploadPlaceholder = document.querySelector('.upload-placeholder') as HTMLElement;
+    
     reader.onload = (e) => {
-      if (this.previewImage && e.target?.result) {
-        this.previewImage.src = e.target.result as string;
-        this.previewImage.style.display = 'block';
+      if (previewImage && e.target?.result) {
+        previewImage.src = e.target.result as string;
+        previewImage.style.display = 'block';
+        if (uploadPlaceholder) {
+          uploadPlaceholder.style.display = 'none';
+        }
       }
     };
     reader.readAsDataURL(file);
   }
 
-  private validateForm(formData: FormData): { valid: boolean; message?: string } {
-    const title = formData.get('nftTitle') as string;
-    const price = formData.get('nftPrice') as string;
-    const file = formData.get('nftImage') as File;
-
-    if (!file || file.size === 0) return { valid: false, message: 'Please upload an image' };
-    if (file.size > 10 * 1024 * 1024) return { valid: false, message: 'Image must be less than 10MB' };
-    if (!title || title.length < 3) return { valid: false, message: 'Title must be at least 3 characters' };
-    if (!price || parseFloat(price) <= 0) return { valid: false, message: 'Price must be greater than 0' };
-
-    return { valid: true };
-  }
-
-  private async handleFormSubmit(event: Event) {
+  private async handleSubmit(event: Event): Promise<void> {
     event.preventDefault();
-    const formData = new FormData(this.form);
-    const validation = this.validateForm(formData);
-
-    if (!validation.valid) {
-      showErrorToUser(new Error(validation.message || 'Invalid form data'));
-      return;
-    }
+    if (this.isUploading) return;
 
     try {
       this.setLoading(true);
+      const formData = new FormData(event.target as HTMLFormElement);
       
+      if (!this.validateForm(formData)) {
+        return;
+      }
+
+      const account = await this.web3Handler.getAccount();
+      if (!account) {
+        throw new Error('Please connect your wallet first');
+      }
+
       const metadata = await this.prepareMetadata(formData);
       const tokenURI = await this.uploadToIPFS(metadata);
       await this.mintNFT(tokenURI, formData.get('nftPrice') as string);
       
-      showSuccessMessage('NFT created successfully!');
+      this.showSuccess('NFT created successfully!');
       window.location.href = 'gallery.html';
     } catch (error) {
-      showErrorToUser(error as Error);
+      this.showError(error instanceof Error ? error.message : 'NFT creation failed');
     } finally {
       this.setLoading(false);
     }
   }
 
-  private async prepareMetadata(formData: FormData): Promise<NFTMetadata> {
+  private validateForm(formData: FormData): boolean {
+    const file = formData.get('nftImage') as File;
+    const title = this.sanitizeHTML(formData.get('nftTitle') as string);
+    const price = formData.get('nftPrice') as string;
+
+    if (!file || file.size === 0) {
+      throw new Error('Please upload an image');
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      throw new Error('Image must be less than 10MB');
+    }
+
+    if (!this.isValidImageType(file)) {
+      throw new Error('Image must be PNG, JPG, or GIF');
+    }
+
+    if (!title || title.length < 3) {
+      throw new Error('Title must be at least 3 characters');
+    }
+
+    if (!price || parseFloat(price) <= 0) {
+      throw new Error('Price must be greater than 0');
+    }
+
+    return true;
+  }
+
+  private async prepareMetadata(formData: FormData): Promise<any> {
     const file = formData.get('nftImage') as File;
     const imageCID = await this.uploadFileToIPFS(file);
-    
+
     return {
-      name: formData.get('nftTitle') as string,
-      description: formData.get('nftDescription') as string || '',
+      name: this.sanitizeHTML(formData.get('nftTitle') as string),
+      description: this.sanitizeHTML(formData.get('nftDescription') as string || ''),
       image: `ipfs://${imageCID}`,
       attributes: [
         {
-          trait_type: "Creator",
-          value: account || "Unknown"
-        }
-      ]
+          trait_type: 'Creator',
+          value: await this.web3Handler.getAccount() || 'Unknown',
+        },
+      ],
     };
   }
 
   private async uploadFileToIPFS(file: File): Promise<string> {
     try {
-      const client = new NFTStorage({ token: process.env.REACT_APP_IPFS_API_KEY || '' });
-      const cid = await client.storeBlob(file);
-      return cid;
+      return await this.nftStorage.storeBlob(file);
     } catch (error) {
-      console.error("File upload to IPFS failed:", error);
-      throw new Error("Failed to upload file to IPFS");
+      console.error('IPFS upload error:', error);
+      throw new Error('Failed to upload image to IPFS');
     }
   }
 
-  private async uploadToIPFS(metadata: NFTMetadata): Promise<string> {
+  private async uploadToIPFS(metadata: any): Promise<string> {
     try {
-      const client = new NFTStorage({ token: process.env.REACT_APP_IPFS_API_KEY || '' });
       const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
-      const cid = await client.storeBlob(blob);
-      return `ipfs://${cid}`;
+      return `ipfs://${await this.nftStorage.storeBlob(blob)}`;
     } catch (error) {
-      console.error("IPFS upload failed:", error);
-      throw new Error("Failed to upload to IPFS. Please try again.");
+      console.error('Metadata upload error:', error);
+      throw new Error('Failed to upload metadata to IPFS');
     }
   }
 
-  private async mintNFT(tokenURI: string, price: string) {
+  private async mintNFT(tokenURI: string, price: string): Promise<void> {
     try {
-      const contract = await getContract();
-      const weiPrice = web3.utils.toWei(price, 'ether');
+      const contract = await this.web3Handler.getContract();
+      const weiPrice = await this.web3Handler.toWei(price);
       
-      await contract.methods.createArt(tokenURI, weiPrice).send({ from: account });
+      await contract.methods.createArt(tokenURI, weiPrice, 10).send({
+        from: await this.web3Handler.getAccount(),
+      });
     } catch (error) {
-      console.error("Minting failed:", error);
-      throw new Error("Failed to create NFT. Check your wallet connection and try again.");
+      console.error('Minting error:', error);
+      throw new Error('Failed to mint NFT');
     }
   }
 
-  private setLoading(isLoading: boolean) {
-    const submitButton = this.form.querySelector('button[type="submit"]') as HTMLButtonElement;
+  private setLoading(isLoading: boolean): void {
+    this.isUploading = isLoading;
+    const submitButton = document.querySelector('#nftUploadForm button[type="submit"]') as HTMLButtonElement;
+    
     if (submitButton) {
       submitButton.disabled = isLoading;
-      submitButton.textContent = isLoading ? 'Creating NFT...' : 'Create NFT';
+      const btnText = submitButton.querySelector('.btn-text') as HTMLElement;
+      const btnLoading = submitButton.querySelector('.btn-loading') as HTMLElement;
+      
+      if (btnText && btnLoading) {
+        btnText.style.display = isLoading ? 'none' : 'inline';
+        btnLoading.style.display = isLoading ? 'inline' : 'none';
+      }
     }
+  }
+
+  private showError(message: string): void {
+    const errorElement = document.createElement('div');
+    errorElement.className = 'error-message';
+    errorElement.textContent = message;
+    errorElement.addEventListener('click', () => errorElement.remove());
+    document.getElementById('nftUploadForm')?.prepend(errorElement);
+  }
+
+  private showSuccess(message: string): void {
+    const successElement = document.createElement('div');
+    successElement.className = 'success-message';
+    successElement.textContent = message;
+    successElement.addEventListener('click', () => successElement.remove());
+    document.body.appendChild(successElement);
+  }
+
+  private sanitizeHTML(str: string): string {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
 }
 
-// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   new NFTUploader();
 });
