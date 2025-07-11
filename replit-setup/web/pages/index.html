@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnoArt - NFT Marketplace</title>
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h2>InnoArt</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create NFT</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="connectWallet" class="btn-primary">Connect Wallet</button>
+                    <div id="walletInfo" class="wallet-info" style="display: none;">
+                        <span id="walletAddress"></span>
+                        <button id="disconnectWallet" class="btn-secondary">Disconnect</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Create, Collect, and Sell NFTs</h1>
+                <p>The premier decentralized marketplace for digital artists. 80% revenue to creators, transparent royalties, and secure blockchain transactions.</p>
+                <div class="hero-actions">
+                    <a href="upload.html" class="btn-primary">Start Creating</a>
+                    <a href="gallery.html" class="btn-secondary">Explore Gallery</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="src/assets/images/hero-nft.png" alt="NFT Artwork" onerror="this.style.display='none'">
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose InnoArt?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Artist-Centric</h3>
+                        <p>80% revenue to artists, 20% platform fee. Fair compensation for creators.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Secure & Transparent</h3>
+                        <p>Ethereum blockchain-powered with smart contract royalties.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Easy to Use</h3>
+                        <p>Simple NFT minting workflow with MetaMask integration.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 InnoArt NFT Marketplace. Built for artists.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="src/js/config.js"></script>
+    <script src="src/js/web3-handler.js"></script>
+    <script src="src/js/main.js"></script>
+</body>
+</html>
