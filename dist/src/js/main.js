@@ -1,11 +1,9 @@
 // InnArt - Main JavaScript
-
 class InnArtApp {
     constructor() {
         this.web3Handler = null;
         this.init();
     }
-
     async init() {
         // Initialize Web3Handler
         this.web3Handler = Web3Handler.getInstance();
@@ -13,14 +11,12 @@ class InnArtApp {
         this.setupAnimations();
         await this.checkWalletConnection();
     }
-
     setupEventListeners() {
         // Connect wallet button
         const connectBtn = document.getElementById('connectWalletBtn');
         if (connectBtn) {
             connectBtn.addEventListener('click', () => this.connectWallet());
         }
-
         // Profile link
         const profileLink = document.getElementById('profileLink');
         if (profileLink) {
@@ -29,7 +25,6 @@ class InnArtApp {
                 this.goToProfile();
             });
         }
-
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -41,14 +36,12 @@ class InnArtApp {
             });
         });
     }
-
     setupAnimations() {
         // Animate elements on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -57,7 +50,6 @@ class InnArtApp {
                 }
             });
         }, observerOptions);
-
         // Observe stat cards
         document.querySelectorAll('.stat-card').forEach(card => {
             card.style.opacity = '0';
@@ -65,7 +57,6 @@ class InnArtApp {
             card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(card);
         });
-
         // Observe feature cards
         document.querySelectorAll('.feature-card').forEach(card => {
             card.style.opacity = '0';
@@ -74,18 +65,17 @@ class InnArtApp {
             observer.observe(card);
         });
     }
-
     async checkWalletConnection() {
         try {
             const account = await this.web3Handler.getAccount();
             if (account) {
                 this.updateWalletUI(account);
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.log('No wallet connected');
         }
     }
-
     async connectWallet() {
         try {
             const connectBtn = document.getElementById('connectWalletBtn');
@@ -93,32 +83,30 @@ class InnArtApp {
                 connectBtn.textContent = 'Connecting...';
                 connectBtn.disabled = true;
             }
-
             // Check if MetaMask is installed
             if (!window.ethereum) {
                 this.showErrorMessage('MetaMask is not installed. Please install MetaMask to connect your wallet.');
                 return;
             }
-
             await this.web3Handler.connectWallet();
             const account = await this.web3Handler.getAccount();
-            
             if (account) {
                 this.updateWalletUI(account);
                 this.showSuccessMessage('Wallet connected successfully!');
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error('Failed to connect wallet:', error);
-            
             let errorMessage = 'Failed to connect wallet. Please try again.';
             if (error.message.includes('User rejected')) {
                 errorMessage = 'Connection request was rejected. Please try again.';
-            } else if (error.message.includes('MetaMask')) {
+            }
+            else if (error.message.includes('MetaMask')) {
                 errorMessage = error.message;
             }
-            
             this.showErrorMessage(errorMessage);
-        } finally {
+        }
+        finally {
             const connectBtn = document.getElementById('connectWalletBtn');
             if (connectBtn) {
                 connectBtn.textContent = 'Connect Wallet';
@@ -126,7 +114,6 @@ class InnArtApp {
             }
         }
     }
-
     updateWalletUI(account) {
         const connectBtn = document.getElementById('connectWalletBtn');
         if (connectBtn) {
@@ -134,28 +121,25 @@ class InnArtApp {
             connectBtn.style.background = 'var(--success-color)';
         }
     }
-
     goToProfile() {
         // Check if wallet is connected
         this.web3Handler.getAccount().then(account => {
             if (account) {
                 window.location.href = 'src/pages/profile.html';
-            } else {
+            }
+            else {
                 this.showErrorMessage('Please connect your wallet first');
             }
         }).catch(() => {
             this.showErrorMessage('Please connect your wallet first');
         });
     }
-
     showSuccessMessage(message) {
         this.showMessage(message, 'success');
     }
-
     showErrorMessage(message) {
         this.showMessage(message, 'error');
     }
-
     showMessage(message, type) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `${type}-message`;
@@ -170,16 +154,13 @@ class InnArtApp {
             z-index: 10000;
             animation: slideIn 0.3s ease-out;
         `;
-
         document.body.appendChild(messageDiv);
-
         setTimeout(() => {
             messageDiv.style.animation = 'slideOut 0.3s ease-out';
             setTimeout(() => messageDiv.remove(), 300);
         }, 3000);
     }
 }
-
 // Add CSS animations
 const style = document.createElement('style');
 style.textContent = `
@@ -206,7 +187,6 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new InnArtApp();
