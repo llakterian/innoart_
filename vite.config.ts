@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
-  base: '/innoart_/', // Update this to match your GitHub repo name
+  base: './', // Use relative paths for deployment
   build: {
     outDir: 'dist',
     emptyOutDir: true,

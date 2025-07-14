@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:github": "tsc && vite build --base=/innoart_/",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "deploy": "./scripts/deploy.sh",
@@ -32,12 +33,13 @@
     "@types/node": "^20.10.5",
     "terser": "^5.43.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "vite": "^4.5.14"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^3.7.1",
     "@walletconnect/ethereum-provider": "^2.11.0",
-    "nft.storage": "^7.0.3",
+    "nft.storage": "^3.4.0",
+    "openzeppelin": "^1.0.0",
     "web3": "^4.3.0"
   },
   "repository": {
