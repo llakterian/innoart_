@@ -1,102 +1,66 @@
-# 🚀 Quick Deploy Guide - Get InnArt Live in 2 Minutes!
+# ⚡ Quick Deploy - InnArt NFT Marketplace
 
-## 🥇 **Option 1: Netlify (EASIEST)**
+## 🚀 1-Minute Deploy to GitHub Pages (Recommended)
 
-### **2-Minute Setup:**
-1. **Go to**: https://netlify.com
-2. **Sign up free** (use your GitHub account)
-3. **Click "Add new site" → "Deploy manually"**
-4. **Drag & drop** the `itch-package` folder from your computer
-5. **Done!** You get instant live URL
-
-**Result**: `https://amazing-project-123.netlify.app`
-
-### **To Share with Colleagues:**
-- Copy the Netlify URL
-- Share: "Check out my NFT marketplace at: [your-netlify-url]"
-
----
-
-## 🥈 **Option 2: Vercel (FAST)**
-
-### **3-Minute Setup:**
-1. **Go to**: https://vercel.com
-2. **Sign up with GitHub**
-3. **Import your repository**: `llakterian/innoart_`
-4. **Click Deploy**
-5. **Live in 30 seconds!**
-
-**Result**: `https://innart-abc123.vercel.app`
-
----
-
-## 🥉 **Option 3: Surge.sh (COMMAND LINE)**
-
-### **1-Minute Setup:**
 ```bash
-# Install surge (one-time)
-npm install -g surge
+# 1. Update your repository (this will auto-deploy!)
+./scripts/update-repo.sh
 
-# Deploy
-cd itch-package
-surge . innart-nft-demo.surge.sh
+# 2. Go to your GitHub repo settings and enable Pages
+# Your site will be live at: https://llakterian.github.io/innoart_/
 ```
 
-**Result**: `https://innart-nft-demo.surge.sh`
+## 🌟 Alternative Quick Options
+
+### Vercel (Fastest)
+```bash
+npm install -g vercel
+npm run build
+vercel --prod
+```
+
+### Netlify (Easiest)
+```bash
+npm run build
+# Then drag 'dist' folder to https://app.netlify.com/drop
+```
+
+### Surge.sh (Simplest)
+```bash
+npm install -g surge
+npm run build
+cd dist && surge
+```
+
+## ⚙️ Required Environment Variables
+
+Create `.env` file with:
+```env
+VITE_ALCHEMY_API_KEY=your_alchemy_api_key
+VITE_CONTRACT_ADDRESS=your_contract_address  
+VITE_NFT_STORAGE_API_KEY=your_nft_storage_key
+VITE_WALLETCONNECT_PROJECT_ID=your_walletconnect_id
+```
+
+## 🔗 Get API Keys (Free)
+
+1. **Alchemy**: [alchemy.com](https://alchemy.com) → Create App → Sepolia
+2. **NFT.Storage**: [nft.storage](https://nft.storage) → New Token
+3. **WalletConnect**: [cloud.walletconnect.com](https://cloud.walletconnect.com) → New Project
+
+## 📱 Test Your Deployment
+
+1. ✅ Website loads
+2. ✅ Connect wallet works
+3. ✅ Register as artist
+4. ✅ Upload NFT
+5. ✅ Buy NFT
+
+## 🆘 Need Help?
+
+- Read full guide: `HOSTING-GUIDE.md`
+- Check deployment docs: `DEPLOYMENT.md`
+- Open issue: [GitHub Issues](https://github.com/llakterian/innoart_/issues)
 
 ---
-
-## 🎮 **Option 4: Replit (ONLINE IDE)**
-
-### **5-Minute Setup:**
-1. **Go to**: https://replit.com
-2. **Create new Repl** → "Python"
-3. **Upload the `replit-setup` folder contents**
-4. **Click "Run"**
-5. **Get live URL from Replit**
-
-**Result**: `https://innart.yourname.repl.co`
-
----
-
-## 🎯 **Which Should You Choose?**
-
-**For Quick Demo**: → **Netlify** (drag & drop, instant)
-**For Professional**: → **Vercel** (GitHub integration, fast)
-**For Developers**: → **Surge.sh** (command line, simple)
-**For Experimentation**: → **Replit** (online coding environment)
-
----
-
-## 🔗 **File You Need:**
-
-**For Netlify/Surge**: Use the `itch-package` folder
-**For Vercel**: Connect your GitHub repository
-**For Replit**: Use the `replit-setup` folder
-
----
-
-## 🎉 **Success Checklist:**
-
-Once deployed, test these features:
-- [ ] Homepage loads with animations
-- [ ] Navigation works between pages
-- [ ] Gallery page displays properly
-- [ ] Upload form appears correctly
-- [ ] Artist registration page loads
-- [ ] MetaMask connect button works
-
----
-
-## 🆘 **Need Help?**
-
-**If any platform doesn't work**:
-1. Try **Netlify first** (most reliable)
-2. Then **Vercel** (backup option)
-3. **Surge.sh** for quick testing
-
-**All three platforms are 100% free and perfect for showcasing to colleagues!**
-
----
-
-🎨 **Your InnArt marketplace will be live and shareable in under 5 minutes!**
+**🎉 Your NFT marketplace will be live in minutes!**

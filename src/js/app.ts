@@ -4,10 +4,19 @@ import { NFTGallery as ComponentGallery } from '../../components/Gallery/gallery
 import { ArtistRegistration } from '../../components/ArtistRegistration/artist-register';
 import { NFTUploader } from './upload';
 import { UserProfile } from './user-profile';
+import { WalletModal } from './wallet-modal';
 
 declare global {
   interface Window {
-    ethereum?: any;
+    ethereum?: {
+      isMetaMask?: boolean;
+      isCoinbaseWallet?: boolean;
+      isTrust?: boolean;
+      isBraveWallet?: boolean;
+      request: (request: { method: string; params?: any[] }) => Promise<any>;
+      on: (event: string, callback: (...args: any[]) => void) => void;
+      selectedAddress: string | null;
+    };
   }
 }
 
@@ -119,12 +128,15 @@ class InnoArtApp {
 
   private async connectWallet(): Promise<void> {
     try {
-      await this.web3Handler.connectWallet();
-      const account = await this.web3Handler.getAccount();
-      this.updateWalletUI(account);
+      const walletModal = new WalletModal(async () => {
+        const account = await this.web3Handler.getAccount();
+        this.updateWalletUI(account);
+      });
+      
+      walletModal.show();
     } catch (error) {
       console.error('Wallet connection error:', error);
-      this.showError('Failed to connect wallet. Please ensure MetaMask is installed.');
+      this.showError('Failed to open wallet selector.');
     }
   }
 

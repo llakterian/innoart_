@@ -13,9 +13,132 @@ class Web3Config {
         this.account = null;
         this.contract = null;
         
-        // Contract ABI (you'll need to add your actual ABI here)
+        // Contract ABI - Complete ABI for InnoArtNFT contract
         this.CONTRACT_ABI = [
-            // Add your contract ABI here after deployment
+            {
+                "inputs": [],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    { "indexed": true, "internalType": "address", "name": "artist", "type": "address" }
+                ],
+                "name": "ArtistRegistered",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
+                    { "indexed": true, "internalType": "address", "name": "creator", "type": "address" },
+                    { "indexed": false, "internalType": "string", "name": "tokenURI", "type": "string" }
+                ],
+                "name": "ArtCreated",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" },
+                    { "indexed": true, "internalType": "address", "name": "buyer", "type": "address" },
+                    { "indexed": true, "internalType": "address", "name": "seller", "type": "address" },
+                    { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" }
+                ],
+                "name": "ArtSold",
+                "type": "event"
+            },
+            {
+                "inputs": [],
+                "name": "registerArtist",
+                "outputs": [],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    { "internalType": "string", "name": "tokenURI", "type": "string" },
+                    { "internalType": "uint256", "name": "price", "type": "uint256" },
+                    { "internalType": "uint256", "name": "royaltyPercentage", "type": "uint256" }
+                ],
+                "name": "createArt",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "artId", "type": "uint256" }],
+                "name": "buyArt",
+                "outputs": [],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+                "name": "registeredArtists",
+                "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "name": "artItems",
+                "outputs": [
+                    { "internalType": "uint256", "name": "id", "type": "uint256" },
+                    { "internalType": "address", "name": "creator", "type": "address" },
+                    { "internalType": "string", "name": "tokenURI", "type": "string" },
+                    { "internalType": "uint256", "name": "price", "type": "uint256" },
+                    { "internalType": "bool", "name": "forSale", "type": "bool" },
+                    { "internalType": "uint256", "name": "royaltyPercentage", "type": "uint256" }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+                "name": "tokenURI",
+                "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+                "name": "ownerOf",
+                "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    { "internalType": "uint256", "name": "artId", "type": "uint256" },
+                    { "internalType": "uint256", "name": "newPrice", "type": "uint256" }
+                ],
+                "name": "setArtPrice",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "artId", "type": "uint256" }],
+                "name": "toggleForSale",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+                    { "internalType": "uint256", "name": "salePrice", "type": "uint256" }
+                ],
+                "name": "royaltyInfo",
+                "outputs": [
+                    { "internalType": "address", "name": "receiver", "type": "address" },
+                    { "internalType": "uint256", "name": "royaltyAmount", "type": "uint256" }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
         ];
     }
 

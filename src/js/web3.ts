@@ -1,18 +1,33 @@
 import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { Contract } from 'web3-eth-contract';
+import { MultiWalletConnector, WalletProvider } from './wallet-connector';
 
 const InnoArtNFT_ABI: AbiItem[] = [
-  // Full ABI generated from InnoArtNFT.sol (add using Hardhat or Remix)
   {
-    "inputs": [
-      { "internalType": "string", "name": "tokenURI", "type": "string" },
-      { "internalType": "uint256", "name": "price", "type": "uint256" },
-      { "internalType": "uint256", "name": "royaltyPercentage", "type": "uint256" }
-    ],
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [{ "internalType": "string", "name": "tokenURI", "type": "string" }, { "internalType": "uint256", "name": "price", "type": "uint256" }, { "internalType": "uint256", "name": "royaltyPercentage", "type": "uint256" }],
     "name": "createArt",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "artId", "type": "uint256" }],
+    "name": "buyArt",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registerArtist",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -22,7 +37,73 @@ const InnoArtNFT_ABI: AbiItem[] = [
     "stateMutability": "view",
     "type": "function"
   },
-  // Add other functions as needed
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "artItems",
+    "outputs": [
+      { "internalType": "uint256", "name": "id", "type": "uint256" },
+      { "internalType": "address", "name": "creator", "type": "address" },
+      { "internalType": "string", "name": "tokenURI", "type": "string" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "internalType": "bool", "name": "forSale", "type": "bool" },
+      { "internalType": "uint256", "name": "royaltyPercentage", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+    "name": "tokenURI",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+    "name": "ownerOf",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "artId", "type": "uint256" }, { "internalType": "uint256", "name": "newPrice", "type": "uint256" }],
+    "name": "setArtPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "artId", "type": "uint256" }],
+    "name": "toggleForSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "uint256", "name": "salePrice", "type": "uint256" }],
+    "name": "royaltyInfo",
+    "outputs": [{ "internalType": "address", "name": "receiver", "type": "address" }, { "internalType": "uint256", "name": "royaltyAmount", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "address", "name": "artist", "type": "address" }],
+    "name": "ArtistRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "creator", "type": "address" }, { "indexed": false, "internalType": "string", "name": "tokenURI", "type": "string" }],
+    "name": "ArtCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" }, { "indexed": true, "internalType": "address", "name": "buyer", "type": "address" }, { "indexed": true, "internalType": "address", "name": "seller", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" }],
+    "name": "ArtSold",
+    "type": "event"
+  }
 ];
 
 interface Window {
@@ -42,13 +123,12 @@ interface Artist {
 
 export class Web3Handler {
   private static instance: Web3Handler;
-  private web3: Web3 | null = null;
-  private contract: Contract<any> | null = null;
-  private account: string | null = null;
+  private walletConnector: MultiWalletConnector;
   private readonly contractAddress: string = (import.meta as any).env?.VITE_CONTRACT_ADDRESS || 'YOUR_CONTRACT_ADDRESS_HERE';
-  private readonly networkId: string = (import.meta as any).env?.VITE_NETWORK_ID || '11155111';
 
-  private constructor() {}
+  private constructor() {
+    this.walletConnector = new MultiWalletConnector(this.contractAddress, InnoArtNFT_ABI);
+  }
 
   public static getInstance(): Web3Handler {
     if (!Web3Handler.instance) {
@@ -57,118 +137,64 @@ export class Web3Handler {
     return Web3Handler.instance;
   }
 
-  public async init(): Promise<boolean> {
+  public getAvailableWallets(): WalletProvider[] {
+    return this.walletConnector.getAvailableProviders();
+  }
+
+  public async connectWallet(providerName?: string): Promise<boolean> {
     try {
-      if (!window.ethereum) {
-        throw new Error('MetaMask not installed');
+      if (providerName) {
+        const provider = this.walletConnector.getAvailableProviders().find(p => p.name === providerName);
+        if (!provider) {
+          throw new Error(`Wallet ${providerName} not found`);
+        }
+        await provider.connector();
+      } else {
+        // Default to first available provider
+        const providers = this.walletConnector.getAvailableProviders();
+        if (providers.length === 0) {
+          throw new Error('No wallets available');
+        }
+        await providers[0].connector();
       }
-
-      this.web3 = new Web3(window.ethereum);
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      
-      if (!accounts.length) {
-        throw new Error('No accounts found');
-      }
-
-      this.account = accounts[0];
-      await this.initContract();
-      this.setupEventListeners();
       
       return true;
     } catch (error) {
-      this.showError(error instanceof Error ? error.message : 'Web3 initialization failed');
+      this.showError(error instanceof Error ? error.message : 'Wallet connection failed');
       return false;
     }
   }
 
-  private async initContract(): Promise<void> {
-    if (!this.web3) throw new Error('Web3 not initialized');
-    
-    const networkId = await this.web3.eth.net.getId();
-    if (networkId.toString() !== this.networkId) {
-      await this.switchNetwork();
-    }
-
-    this.contract = new this.web3.eth.Contract(InnoArtNFT_ABI, this.contractAddress);
-  }
-
-  private async switchNetwork(): Promise<void> {
-    try {
-      await window.ethereum!.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${parseInt(this.networkId).toString(16)}` }],
-      });
-    } catch (switchError: any) {
-      if (switchError.code === 4902) {
-        await window.ethereum!.request({
-          method: 'wallet_addEthereumChain',
-          params: [
-            {
-              chainId: `0x${parseInt(this.networkId).toString(16)}`,
-              chainName: 'Sepolia Test Network',
-              rpcUrls: [(import.meta as any).env?.VITE_ALCHEMY_URL || 'https://eth-sepolia.g.alchemy.com/v2/YOUR_ALCHEMY_API_KEY'],
-              nativeCurrency: {
-                name: 'ETH',
-                symbol: 'ETH',
-                decimals: 18,
-              },
-              blockExplorerUrls: ['https://sepolia.etherscan.io/'],
-            },
-          ],
-        });
-      } else {
-        throw switchError;
-      }
-    }
-  }
-
-  private setupEventListeners(): void {
-    if (!window.ethereum) return;
-
-    window.ethereum.on('accountsChanged', (accounts: string[]) => {
-      this.account = accounts[0] || null;
-    });
-
-    window.ethereum.on('chainChanged', () => {
-      window.location.reload();
-    });
-  }
-
-  public async connectWallet(): Promise<void> {
-    if (!window.ethereum) throw new Error('MetaMask not installed');
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    this.account = accounts[0] || null;
-  }
-
   public async disconnectWallet(): Promise<void> {
-    this.account = null;
+    await this.walletConnector.disconnect();
   }
 
   public async getAccount(): Promise<string | null> {
-    return this.account;
+    return this.walletConnector.getAccount();
   }
 
   public async getContract(): Promise<Contract<any>> {
-    if (!this.contract) {
-      await this.initContract();
+    const contract = this.walletConnector.getContract();
+    if (!contract) {
+      throw new Error('Contract not initialized. Please connect wallet first.');
     }
-    return this.contract!;
+    return contract;
   }
 
   public async isConnected(): Promise<boolean> {
-    if (!window.ethereum) return false;
-    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-    return accounts.length > 0;
+    return this.walletConnector.isConnected();
   }
 
   public async toWei(amount: string): Promise<string> {
-    if (!this.web3) throw new Error('Web3 not initialized');
-    return this.web3.utils.toWei(amount, 'ether');
+    return this.walletConnector.toWei(amount);
   }
 
   public fromWei(amount: string): string {
-    if (!this.web3) throw new Error('Web3 not initialized');
-    return this.web3.utils.fromWei(amount, 'ether');
+    return this.walletConnector.fromWei(amount);
+  }
+
+  public getWeb3(): Web3 | null {
+    return this.walletConnector.getWeb3();
   }
 
   public async getFeaturedArtists(): Promise<Artist[]> {

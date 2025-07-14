@@ -6,8 +6,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 //import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract InnoArtNFT is ERC721, Ownable, IERC2981, Pausable {
+contract InnoArtNFT is ERC721, Ownable, IERC2981, Pausable, ReentrancyGuard {
     uint256 private _tokenIds;
 
     struct ArtItem {
@@ -117,7 +118,7 @@ contract InnoArtNFT is ERC721, Ownable, IERC2981, Pausable {
     return newItemIds;
 }
 
-    function buyArt(uint256 artId) external payable whenNotPaused {
+    function buyArt(uint256 artId) external payable whenNotPaused nonReentrant {
         ArtItem memory artItem = artItems[artId];
         require(artItem.forSale, "Art not for sale");
         require(msg.value >= artItem.price, "Insufficient funds");
@@ -125,18 +126,28 @@ contract InnoArtNFT is ERC721, Ownable, IERC2981, Pausable {
 
         address payable seller = payable(ownerOf(artId));
         
+        // Set to false before transfer to prevent reentrancy
+        artItems[artId].forSale = false;
+        
         _transfer(seller, msg.sender, artId);
         
         uint256 platformFee = (msg.value * platformFeePercentage) / 100;
-
         uint256 royaltyFee = (msg.value * artItem.royaltyPercentage) / 100;
+        
+        // Check for overflow
+        require(platformFee + royaltyFee <= msg.value, "Fee calculation error");
+        
         uint256 sellerProceeds = msg.value - platformFee - royaltyFee;
         
-        payable(developer).transfer(platformFee);
-        payable(artItem.creator).transfer(royaltyFee);
-        seller.transfer(sellerProceeds);
+        // Use call instead of transfer for better gas handling
+        (bool success1, ) = developer.call{value: platformFee}("");
+        require(success1, "Platform fee transfer failed");
         
-        artItems[artId].forSale = false;
+        (bool success2, ) = artItem.creator.call{value: royaltyFee}("");
+        require(success2, "Royalty transfer failed");
+        
+        (bool success3, ) = seller.call{value: sellerProceeds}("");
+        require(success3, "Seller payment failed");
         
         emit ArtSold(artId, msg.sender, seller, artItem.price);
     }
