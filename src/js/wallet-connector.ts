@@ -74,6 +74,7 @@ export class MultiWalletConnector {
       this.provider = await EthereumProvider.init({
         chains: [this.chainId],
         projectId: process.env.VITE_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
+        showQrModal: true,
         rpcMap: {
           [this.chainId]: process.env.VITE_ALCHEMY_URL || 'https://eth-sepolia.g.alchemy.com/v2/demo'
         }
@@ -150,7 +151,7 @@ export class MultiWalletConnector {
 
     // Check network
     const networkId = await this.web3.eth.net.getId();
-    if (networkId !== this.chainId) {
+    if (Number(networkId) !== this.chainId) {
       await this.switchNetwork();
     }
 
@@ -258,14 +259,6 @@ export class MultiWalletConnector {
 // Global interface for window.ethereum
 declare global {
   interface Window {
-    ethereum?: {
-      isMetaMask?: boolean;
-      isCoinbaseWallet?: boolean;
-      isTrust?: boolean;
-      isBraveWallet?: boolean;
-      request: (request: { method: string; params?: any[] }) => Promise<any>;
-      on: (event: string, callback: (...args: any[]) => void) => void;
-      selectedAddress: string | null;
-    };
+    ethereum?: any;
   }
 }

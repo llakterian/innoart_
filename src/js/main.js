@@ -16,7 +16,7 @@ class InnArtApp {
 
     setupEventListeners() {
         // Connect wallet button
-        const connectBtn = document.getElementById('connectWalletBtn');
+        const connectBtn = document.getElementById('connectWallet');
         if (connectBtn) {
             connectBtn.addEventListener('click', () => this.connectWallet());
         }
@@ -88,7 +88,7 @@ class InnArtApp {
 
     async connectWallet() {
         try {
-            const connectBtn = document.getElementById('connectWalletBtn');
+            const connectBtn = document.getElementById('connectWallet');
             if (connectBtn) {
                 connectBtn.textContent = 'Connecting...';
                 connectBtn.disabled = true;
@@ -119,7 +119,7 @@ class InnArtApp {
             
             this.showErrorMessage(errorMessage);
         } finally {
-            const connectBtn = document.getElementById('connectWalletBtn');
+            const connectBtn = document.getElementById('connectWallet');
             if (connectBtn) {
                 connectBtn.textContent = 'Connect Wallet';
                 connectBtn.disabled = false;
@@ -128,7 +128,7 @@ class InnArtApp {
     }
 
     updateWalletUI(account) {
-        const connectBtn = document.getElementById('connectWalletBtn');
+        const connectBtn = document.getElementById('connectWallet');
         if (connectBtn) {
             connectBtn.textContent = `${account.substring(0, 6)}...${account.substring(account.length - 4)}`;
             connectBtn.style.background = 'var(--success-color)';

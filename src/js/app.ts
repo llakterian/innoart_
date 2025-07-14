@@ -8,15 +8,7 @@ import { WalletModal } from './wallet-modal';
 
 declare global {
   interface Window {
-    ethereum?: {
-      isMetaMask?: boolean;
-      isCoinbaseWallet?: boolean;
-      isTrust?: boolean;
-      isBraveWallet?: boolean;
-      request: (request: { method: string; params?: any[] }) => Promise<any>;
-      on: (event: string, callback: (...args: any[]) => void) => void;
-      selectedAddress: string | null;
-    };
+    ethereum?: any;
   }
 }
 

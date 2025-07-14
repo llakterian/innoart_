@@ -107,11 +107,7 @@ const InnoArtNFT_ABI: AbiItem[] = [
 ];
 
 interface Window {
-  ethereum?: {
-    request: (request: { method: string; params?: any[] }) => Promise<any>;
-    on: (event: string, callback: (...args: any[]) => void) => void;
-    selectedAddress: string | null;
-  };
+  ethereum?: any;
 }
 
 interface Artist {
