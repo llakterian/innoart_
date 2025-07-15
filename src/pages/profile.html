@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - InnoArt</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <h2>InnoArt</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create NFT</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="connectWallet" class="btn-primary">Connect Wallet</button>
+                    <div id="walletInfo" class="wallet-info" style="display: none;">
+                        <span id="walletAddress"></span>
+                        <button id="disconnectWallet" class="btn-secondary">Disconnect</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container profile-page">
+        <div id="profileContent">
+            <div id="profileHeader">
+                <!-- Profile header content will be loaded here -->
+            </div>
+            <div id="profileDetails">
+                <!-- Profile details content will be loaded here -->
+            </div>
+            <div class="nft-galleries">
+                <h2>My Creations</h2>
+                <div id="createdNFTs" class="nft-grid">
+                    <!-- User's created NFTs will be loaded here -->
+                </div>
+                <h2>My Collection</h2>
+                <div id="collectedNFTs" class="nft-grid">
+                    <!-- User's collected NFTs will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 InnoArt NFT Marketplace. Built for artists.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script type="module" src="../profile.ts"></script>
+</body>
+</html>
