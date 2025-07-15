@@ -294,7 +294,8 @@
                 <li><a href="gallery.html">Gallery</a></li>
                 <li><a href="upload.html">Create</a></li>
                 <li><a href="artist-register.html" class="active">Artists</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="member-artists.html">Members</a></li>
+                <li><a href="profile.html">Profile</a></li>
             </ul>
             <button class="btn btn-primary" id="connectWallet">Connect Wallet</button>
         </div>
@@ -342,7 +343,8 @@
 
                     <div class="artist-showcase">
                         <h3>🌟 Featured Artists</h3>
-                        <div class="artist-grid">
+                        <div class="artist-grid" id="featuredArtistsGrid">
+                            <!-- Featured artists will be populated here -->
                             <div class="artist-card">
                                 <div class="artist-avatar">DP</div>
                                 <div class="artist-name">@DigitalPainter</div>
@@ -353,16 +355,11 @@
                                 <div class="artist-name">@CryptoCreator</div>
                                 <div class="artist-sales">32 NFTs sold</div>
                             </div>
-                            <div class="artist-card">
-                                <div class="artist-avatar">NA</div>
-                                <div class="artist-name">@NeoArtist</div>
-                                <div class="artist-sales">28 NFTs sold</div>
-                            </div>
-                            <div class="artist-card">
-                                <div class="artist-avatar">PX</div>
-                                <div class="artist-name">@PixelMaster</div>
-                                <div class="artist-sales">38 NFTs sold</div>
-                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 1.5rem;">
+                            <a href="member-artists.html" class="btn btn-primary">
+                                View All Member Artists
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -385,7 +382,7 @@
                         <h3>🔗 Connect Your Wallet</h3>
                         <p>First, connect your MetaMask wallet to proceed with registration.</p>
                         <button id="registerConnectBtn" class="btn btn-primary">
-                            Connect MetaMask Wallet
+                            Connect Wallet
                         </button>
                     </div>
 
@@ -442,8 +439,14 @@
         </div>
     </main>
 
-    <script src="../js/style-guardian.js"></script>
-    <script src="../js/web3-handler.js"></script>
-    <script src="../js/artist-register.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/wallet-connection-direct.js"></script>
+    <script src="../js/wallet-connection.js"></script>
+    <script src="../js/blockchain-service.js"></script>
+    <script src="../js/session-manager.js"></script>
+    <script src="../js/currency-converter.js"></script>
+    <script src="../js/user-store.js"></script>
+    <script src="../js/image-handler.js"></script>
+    <script src="../js/artist-register-main.js"></script>
 </body>
 </html>

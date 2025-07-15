@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - InnArt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .profile-main {
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .profile-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-content {
+            display: block;
+        }
+        
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .wallet-status::before {
+            content: "✓";
+            margin-right: 8px;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            padding: 3rem 0;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-content h2 {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .welcome-content p {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .artist-profile-form {
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .artist-profile-form h3 {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-control:disabled {
+            background: var(--background-dark);
+            color: var(--text-dark);
+            cursor: not-allowed;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-dark);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .connect-wallet-section {
+            text-align: center;
+            padding: 3rem;
+            background: var(--card-background);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .connect-wallet-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .connect-wallet-section p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .profile-info {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .profile-details {
+            flex: 1;
+            margin-left: 2rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-address {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nft-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .nft-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .nft-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nft-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .nft-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .nft-info {
+            padding: 1rem;
+        }
+
+        .nft-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .nft-price {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .profile-header-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-details {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .profile-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .profile-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+  <link rel="stylesheet" href="../../assets/global-5506fc5d.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="../../index.html" style="color: inherit; text-decoration: none;">InnArt</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="upload.html">Create</a></li>
+                <li><a href="artist-register.html">Artists</a></li>
+                <li><a href="member-artists.html">Members</a></li>
+                <li><a href="profile.html" class="active">Profile</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            <div class="wallet-status" id="walletStatus">
+                <span id="walletAddress">Wallet Connected</span>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <ul class="nav-links">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create</a></li>
+                    <li><a href="artist-register.html">Artists</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="profile-main">
+        <div class="container">
+            <section class="profile-header">
+                <h1>My Profile</h1>
+            </section>
+
+            <!-- Welcome Section -->
+            <section id="welcomeSection" class="welcome-section">
+                <div class="welcome-content">
+                    <h2>Welcome to Your Profile</h2>
+                    <p>Manage your artist profile, view your NFTs, and track your activity.</p>
+                    <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                </div>
+            </section>
+
+            <!-- Profile Content (shown when connected) -->
+            <section id="profileContent" class="profile-content">
+                <div class="profile-info">
+                    <div class="profile-header-info">
+                        <div class="profile-avatar">
+                            <span id="userInitials">?</span>
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name">
+                                <span id="userAddress">Connect Wallet</span>
+                            </div>
+                            <div class="profile-address">
+                                <span id="userAddressDisplay">No address connected</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-secondary" id="editProfileBtn">Edit Profile</button>
+                            <button class="btn btn-primary" id="saveProfileBtn" style="display: none;">Save Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Artist Profile Form (shown when editing or first time) -->
+                <div id="artistProfileForm" class="artist-profile-form" style="display: none;">
+                    <h3>Artist Profile</h3>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label for="artistName">Artist Name *</label>
+                            <input type="text" id="artistName" class="form-control editable" placeholder="Enter your artist name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistBio">Artist Bio *</label>
+                            <textarea id="artistBio" class="form-control editable" rows="4" placeholder="Tell us about yourself and your art..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistWebsite">Website (Optional)</label>
+                            <input type="url" id="artistWebsite" class="form-control editable" placeholder="https://your-website.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistSocial">Social Media (Optional)</label>
+                            <input type="text" id="artistSocial" class="form-control editable" placeholder="@yourusername or social media link">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistEmail">Email (Optional)</label>
+                            <input type="email" id="artistEmail" class="form-control editable" placeholder="your@email.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="artistLocation">Location (Optional)</label>
+                            <input type="text" id="artistLocation" class="form-control editable" placeholder="City, Country">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalNFTs">0</div>
+                        <div class="stat-label">NFTs Owned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalSales">0</div>
+                        <div class="stat-label">Sales</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalEarnings">0 ETH</div>
+                        <div class="stat-label">Total Earnings</div>
+                    </div>
+                </div>
+
+                <div class="nft-section">
+                    <h2 class="section-title">My NFTs</h2>
+                    <div id="userNFTGrid" class="nft-grid">
+                        <!-- NFTs will be populated here -->
+                        <div class="empty-state">
+                            <p>No NFTs found. Start creating or buying NFTs to see them here!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/wallet-connection-direct.js"></script>
+    <script src="../js/wallet-connection.js"></script>
+    <script src="../js/blockchain-service.js"></script>
+    <script src="../js/session-manager.js"></script>
+    <script src="../js/currency-converter.js"></script>
+    <script src="../js/user-store.js"></script>
+    <script src="../js/image-handler.js"></script>
+    <script src="../js/profile-main.js"></script>
+</body>
+</html>

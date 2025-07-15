@@ -213,7 +213,7 @@
             }
         }
     </style>
-  <link rel="stylesheet" href="/innoart_/assets/global-38c848b6.css">
+  <link rel="stylesheet" href="../../assets/global-5506fc5d.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -227,9 +227,22 @@
                 <li><a href="gallery.html" class="active">Gallery</a></li>
                 <li><a href="upload.html">Create</a></li>
                 <li><a href="artist-register.html">Artists</a></li>
-                <li><a href="#profile">Profile</a></li>
+                <li><a href="member-artists.html">Members</a></li>
+                <li><a href="profile.html">Profile</a></li>
             </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
             <button class="btn btn-primary" id="connectWallet">Connect Wallet</button>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <ul class="nav-links">
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="upload.html">Create</a></li>
+                    <li><a href="artist-register.html">Artists</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -263,8 +276,14 @@
         </div>
     </main>
 
-    <script src="../js/style-guardian.js"></script>
-    <script src="../js/web3-handler.js"></script>
-    <script src="../js/gallery.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/wallet-connection-direct.js"></script>
+    <script src="../js/wallet-connection.js"></script>
+    <script src="../js/blockchain-service.js"></script>
+    <script src="../js/session-manager.js"></script>
+    <script src="../js/currency-converter.js"></script>
+    <script src="../js/user-store.js"></script>
+    <script src="../js/image-handler.js"></script>
+    <script src="../js/gallery-main.js"></script>
 </body>
 </html>
