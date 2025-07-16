@@ -15,29 +15,50 @@
 
         .artist-main {
             min-height: 100vh;
-            padding: 2rem 0;
+            padding: 6rem 0 2rem;
+            position: relative;
         }
 
         .artist-hero {
             text-align: center;
             margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
         }
 
         .artist-hero h1 {
             font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1.2;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
         }
 
         .artist-hero p {
             font-size: 1.3rem;
             color: var(--text-dark);
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .artist-hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
         }
 
         .registration-container {
@@ -47,19 +68,47 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .benefits-section {
             background: var(--card-background);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 2.5rem;
             border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefits-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .benefits-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            z-index: -1;
         }
 
         .benefits-section h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 1.5rem;
             color: var(--text-light);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .benefits-list {
@@ -109,45 +158,87 @@
 
         .registration-form {
             background: var(--card-background);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 2.5rem;
             border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .registration-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .registration-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            z-index: -1;
         }
 
         .form-header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .form-header h2 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 0.5rem;
             color: var(--text-light);
+            font-weight: 700;
         }
 
         .steps-indicator {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+            position: relative;
+        }
+
+        .steps-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: -1;
         }
 
         .step {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            background: var(--border-color);
+            background: var(--card-background);
+            border: 3px solid var(--border-color);
             color: var(--text-dark);
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .step.active {
             background: var(--primary-color);
+            border-color: var(--primary-color);
             color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
         }
 
         .step.completed {
@@ -314,7 +405,7 @@
                     <h2>🎨 Artist Benefits</h2>
                     <ul class="benefits-list">
                         <li>Mint and sell your digital creations as NFTs</li>
-                        <li>Earn 85% of primary sales (15% platform fee)</li>
+                        <li>Earn 80% of primary sales (20% platform fee)</li>
                         <li>Set custom royalty percentages for secondary sales</li>
                         <li>Featured spots in our artist showcase</li>
                         <li>Access to exclusive artist community and resources</li>
@@ -440,6 +531,7 @@
     </main>
 
     <script type="module" src="/src/js/config.js"></script>
+    <script type="module" src="/src/js/calculation-verifier.js"></script>
     <script type="module" src="/src/js/user-store.js"></script>
     <script type="module" src="/src/js/wallet-connection.js"></script>
     <script type="module" src="/src/js/blockchain-service.js"></script>

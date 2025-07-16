@@ -79,13 +79,14 @@ class UserStore {
             amount: '0.01', // Registration fee
             timestamp: Date.now(),
             status: 'completed',
-            description: 'Artist registration fee (100% to developer)'
+            description: 'Artist registration fee (100% to developer)',
+            developerAddress: '0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191'
         });
         
         // Record developer fee transaction
         this.addTransaction({
             type: 'registration_fee_revenue',
-            walletAddress: 'developer_wallet',
+            walletAddress: '0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191',
             amount: '0.01', // 100% to developer
             timestamp: Date.now(),
             status: 'completed',
@@ -257,12 +258,13 @@ class UserStore {
         // Record developer fee transaction
         this.addTransaction({
             type: 'platform_fee',
-            walletAddress: 'developer_wallet',
+            walletAddress: '0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191',
             nftId: nftId,
             amount: developerFee.toString(),
             timestamp: Date.now(),
             status: 'completed',
-            description: `Platform fee for "${nft.name}" (20% of ${nft.price} ETH)`
+            description: `Platform fee for "${nft.name}" (20% of ${nft.price} ETH)`,
+            developerAddress: '0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191'
         });
         
         // Update artist statistics

@@ -191,20 +191,38 @@ class BlockchainService {
         const ARTIST_EARNINGS_RATE = this.artistRoyaltyPercent / 100; // 80% to artist
         
         const price = parseFloat(nftPrice);
-        const developerFee = price * DEVELOPER_FEE_RATE;
-        const artistEarnings = price * ARTIST_EARNINGS_RATE;
+        const developerFee = Number((price * DEVELOPER_FEE_RATE).toFixed(6));
+        const artistEarnings = Number((price * ARTIST_EARNINGS_RATE).toFixed(6));
+        
+        // Validate calculations
+        const totalCalculated = Number((developerFee + artistEarnings).toFixed(6));
+        if (Math.abs(totalCalculated - price) > 0.000001) {
+            console.error('Fee calculation mismatch:', { price, developerFee, artistEarnings, totalCalculated });
+            return {
+                success: false,
+                error: 'Fee calculation error - please try again'
+            };
+        }
         
         // Check balance
         const balance = await this.getBalance(fromAddress);
         if (parseFloat(balance) < price) {
             return {
                 success: false,
-                error: 'Insufficient balance for NFT purchase'
+                error: `Insufficient balance. Required: ${price} ETH, Available: ${parseFloat(balance).toFixed(4)} ETH`
             };
         }
         
+        console.log('NFT Purchase Breakdown:', {
+            totalPrice: price,
+            artistEarnings: artistEarnings,
+            developerFee: developerFee,
+            artistAddress: creatorAddress,
+            developerAddress: this.developerWallet
+        });
+        
         try {
-            // Send artist earnings
+            // Send artist earnings (80%)
             const artistTransaction = await this.sendTransaction(
                 fromAddress,
                 creatorAddress,
@@ -214,23 +232,30 @@ class BlockchainService {
             if (!artistTransaction.success) {
                 return {
                     success: false,
-                    error: 'Failed to send payment to artist'
+                    error: 'Failed to send payment to artist: ' + artistTransaction.error
                 };
             }
             
-            // Send developer fee
+            // Send developer fee (20%) to the specified developer wallet
             const developerTransaction = await this.sendTransaction(
                 fromAddress,
-                this.developerWallet,
+                this.developerWallet, // This is now 0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191
                 developerFee.toString()
             );
             
             if (!developerTransaction.success) {
                 return {
                     success: false,
-                    error: 'Failed to send developer fee'
+                    error: 'Failed to send developer fee: ' + developerTransaction.error
                 };
             }
+            
+            console.log('NFT Purchase Successful:', {
+                artistTx: artistTransaction.transactionHash,
+                developerTx: developerTransaction.transactionHash,
+                artistReceived: artistEarnings,
+                developerReceived: developerFee
+            });
             
             return {
                 success: true,
@@ -241,14 +266,16 @@ class BlockchainService {
                     artistReceives: artistEarnings,
                     platformFee: developerFee,
                     artistPercentage: '80%',
-                    platformPercentage: '20%'
+                    platformPercentage: '20%',
+                    artistAddress: creatorAddress,
+                    developerAddress: this.developerWallet
                 }
             };
         } catch (error) {
             console.error('NFT purchase failed:', error);
             return {
                 success: false,
-                error: error.message
+                error: error.message || 'Transaction failed'
             };
         }
     }

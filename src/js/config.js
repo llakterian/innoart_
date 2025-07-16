@@ -12,7 +12,7 @@ class Config {
         
         // Smart Contract Configuration
         this.contractAddress = '0xca96FFD000Ce3d041C905d4d76d5781E35D75B3A';
-        this.developerWallet = '0xca96FFD000Ce3d041C905d4d76d5781E35D75B3A';
+        this.developerWallet = '0x426F1B6F42F4fAa8cDc96D0C2a82e70709F3a191';
         
         // IPFS Storage Configuration
         this.ipfsApiKey = '378ec52e.244f1311cc574f1d90b8210688e4e0e7';
