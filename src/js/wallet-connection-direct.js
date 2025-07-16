@@ -14,73 +14,51 @@
         console.log('Direct wallet connection initiated');
         
         if (window.walletState.isConnecting) {
-            console.log('Connection already in progress');
+            showMessage('Connection already in progress', 'info');
             return;
         }
         
         window.walletState.isConnecting = true;
-        
-        // Update button state
         updateAllButtons('Connecting...', true);
         
         try {
-            // Check if MetaMask is installed
             if (typeof window.ethereum === 'undefined') {
                 throw new Error('MetaMask not installed');
             }
             
-            // Request account access
-            const accounts = await window.ethereum.request({
-                method: 'eth_requestAccounts'
-            });
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             
             if (accounts.length > 0) {
                 window.walletState.isConnected = true;
                 window.walletState.walletAddress = accounts[0];
                 
-                // Request signature
                 try {
                     const message = `Welcome to InnArt!\n\nSign this message to authenticate your wallet.\n\nTimestamp: ${new Date().toISOString()}\nAddress: ${accounts[0]}`;
+                    const signature = await window.ethereum.request({ method: 'personal_sign', params: [message, accounts[0]] });
                     
-                    const signature = await window.ethereum.request({
-                        method: 'personal_sign',
-                        params: [message, accounts[0]]
-                    });
-                    
-                    // Store signature
                     sessionStorage.setItem('wallet_signature', signature);
                     sessionStorage.setItem('wallet_address', accounts[0]);
                     sessionStorage.setItem('wallet_auth_timestamp', Date.now().toString());
                     
-                    console.log('Wallet connected successfully:', accounts[0]);
                     showMessage('Wallet connected successfully!', 'success');
-                    
+                    console.warn('Storing wallet signature in sessionStorage. This is not recommended for production applications.');
                 } catch (signError) {
-                    console.log('Signature declined, but wallet connected');
                     showMessage('Wallet connected (signature declined)', 'warning');
                 }
                 
                 updateAllButtons();
-                
             } else {
                 throw new Error('No accounts found');
             }
-            
         } catch (error) {
             console.error('Connection error:', error);
-            
             let errorMessage = 'Failed to connect wallet';
-            if (error.code === 4001) {
-                errorMessage = 'Connection rejected by user';
-            } else if (error.code === -32002) {
-                errorMessage = 'Connection request pending in MetaMask';
-            } else if (error.message.includes('not installed')) {
-                errorMessage = 'MetaMask not installed';
-            }
+            if (error.code === 4001) errorMessage = 'Connection rejected by user';
+            else if (error.code === -32002) errorMessage = 'Connection request pending in MetaMask';
+            else if (error.message.includes('not installed')) errorMessage = 'MetaMask not installed';
             
             showMessage(errorMessage, 'error');
             updateAllButtons();
-            
         } finally {
             window.walletState.isConnecting = false;
         }
@@ -93,12 +71,11 @@
         window.walletState.isConnected = false;
         window.walletState.walletAddress = null;
         
-        // Clear session storage
         sessionStorage.removeItem('wallet_signature');
         sessionStorage.removeItem('wallet_address');
         sessionStorage.removeItem('wallet_auth_timestamp');
         
-        updateAllButtons();
+        updateAllButtons('Connect Wallet', false);
         showMessage('Wallet disconnected', 'success');
     };
     
@@ -161,7 +138,7 @@
     }
     
     // Show message function
-    function showMessage(message, type = 'info') {
+    function showMessage(message, type = 'info', duration = 5000) {
         console.log(`[${type.toUpperCase()}] ${message}`);
         
         // Remove existing message
@@ -184,6 +161,8 @@
             z-index: 10000;
             max-width: 300px;
             word-wrap: break-word;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
             ${type === 'success' ? 'background: #10b981; color: white;' : ''}
             ${type === 'error' ? 'background: #ef4444; color: white;' : ''}
             ${type === 'warning' ? 'background: #f59e0b; color: white;' : ''}
@@ -192,12 +171,20 @@
         
         document.body.appendChild(messageDiv);
         
-        // Auto remove after 5 seconds
+        // Fade in
         setTimeout(() => {
-            if (messageDiv.parentNode) {
-                messageDiv.remove();
-            }
-        }, 5000);
+            messageDiv.style.opacity = '1';
+        }, 100);
+        
+        // Auto remove after specified duration
+        setTimeout(() => {
+            messageDiv.style.opacity = '0';
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 300);
+        }, duration);
     }
     
     // Check for existing connection
