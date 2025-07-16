@@ -10,8 +10,10 @@
     "build:github": "tsc && vite build --base=/innoart_/",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
-    "prepare-deploy": "node prepare-deploy.js",
+    "prepare-deploy": "node prepare-deploy.cjs",
     "deploy": "npm run build && npm run prepare-deploy",
+    "deploy:netlify": "npm run build && npm run prepare-deploy",
+    "deploy:clean": "rm -rf deploy/ && npm run deploy",
     "deploy:github": "./scripts/deploy.sh",
     "update-repo": "./scripts/update-repo.sh",
     "serve": "python3 -m http.server 8000",
@@ -33,7 +35,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.10.5",
-    "archiver": "^5.3.1",
+    "archiver": "^5.3.2",
     "terser": "^5.43.1",
     "typescript": "^5.3.3",
     "vite": "^4.5.14"

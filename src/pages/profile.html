@@ -85,80 +85,109 @@
                         </div>
                         
                         <div class="profile-actions">
-                            <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
-                            <button class="btn btn-success" id="saveProfileBtn" style="display: none;">Save Changes</button>
-                            <button class="btn btn-secondary" id="cancelEditBtn" style="display: none;">Cancel</button>
+                            <div class="wallet-info">
+                                <div class="connection-status">
+                                    <span class="status-indicator connected"></span>
+                                    <span class="status-text">Wallet Connected</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </aside>
 
                 <main class="profile-main-content">
-                    <!-- Profile Information Display -->
-                    <div id="profileDisplay" class="card">
-                        <h3>Profile Information</h3>
-                        <div class="profile-info-grid">
-                            <div class="info-item">
-                                <label>Display Name:</label>
-                                <span id="displayName">Not set</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Bio:</label>
-                                <span id="displayBio">No bio provided</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Website:</label>
-                                <span id="displayWebsite">Not provided</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Social Media:</label>
-                                <span id="displaySocial">Not provided</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Email:</label>
-                                <span id="displayEmail">Not provided</span>
-                            </div>
-                            <div class="info-item">
-                                <label>Location:</label>
-                                <span id="displayLocation">Not provided</span>
+                    <!-- Profile Information Card - Fixed Height -->
+                    <div class="card profile-info-card">
+                        <div class="card-header">
+                            <h3>Profile Information</h3>
+                            <div class="profile-actions-inline">
+                                <button class="btn btn-primary btn-sm" id="editProfileBtn">
+                                    <span class="btn-icon">✏️</span>
+                                    Edit Profile
+                                </button>
+                                <button class="btn btn-success btn-sm" id="saveProfileBtn" style="display: none;">
+                                    <span class="btn-icon">💾</span>
+                                    Save Changes
+                                </button>
+                                <button class="btn btn-secondary btn-sm" id="cancelEditBtn" style="display: none;">
+                                    <span class="btn-icon">❌</span>
+                                    Cancel
+                                </button>
                             </div>
                         </div>
-                    </div>
+                        
+                        <!-- Profile Display Mode -->
+                        <div id="profileDisplay" class="profile-content-area">
+                            <div class="profile-info-grid">
+                                <div class="info-item">
+                                    <label>Display Name:</label>
+                                    <span id="displayName">Not set</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Bio:</label>
+                                    <span id="displayBio" class="bio-text">No bio provided</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Website:</label>
+                                    <span id="displayWebsite">Not provided</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Social Media:</label>
+                                    <span id="displaySocial">Not provided</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Email:</label>
+                                    <span id="displayEmail">Not provided</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Location:</label>
+                                    <span id="displayLocation">Not provided</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- Profile Editing Form -->
-                    <div id="profileEditForm" class="card" style="display: none;">
-                        <h3>Edit Profile</h3>
-                        <form id="profileForm">
-                            <div class="form-group">
-                                <label for="profileName">Display Name *</label>
-                                <input type="text" id="profileName" class="form-control" placeholder="Enter your display name" required>
-                                <small class="form-help">This is how others will see your name</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="profileBio">Bio</label>
-                                <textarea id="profileBio" class="form-control" rows="4" placeholder="Tell us about yourself..."></textarea>
-                                <small class="form-help">Share your story, interests, or background</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="profileWebsite">Website</label>
-                                <input type="url" id="profileWebsite" class="form-control" placeholder="https://your-website.com">
-                                <small class="form-help">Your personal or professional website</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="profileSocial">Social Media</label>
-                                <input type="text" id="profileSocial" class="form-control" placeholder="@yourusername or social media link">
-                                <small class="form-help">Twitter, Instagram, or other social media</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="profileEmail">Email (Optional)</label>
-                                <input type="email" id="profileEmail" class="form-control" placeholder="your@email.com">
-                                <small class="form-help">For contact purposes (not publicly displayed)</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="profileLocation">Location</label>
-                                <input type="text" id="profileLocation" class="form-control" placeholder="City, Country">
-                                <small class="form-help">Your general location</small>
-                            </div>
-                        </form>
+                        <!-- Profile Edit Mode -->
+                        <div id="profileEditForm" class="profile-content-area" style="display: none;">
+                            <form id="profileForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profileName">Display Name *</label>
+                                        <input type="text" id="profileName" class="form-control" placeholder="Enter your display name" required>
+                                        <small class="form-help">This is how others will see your name</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileLocation">Location</label>
+                                        <input type="text" id="profileLocation" class="form-control" placeholder="City, Country">
+                                        <small class="form-help">Your general location</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profileBio">Bio</label>
+                                    <textarea id="profileBio" class="form-control" rows="3" placeholder="Tell us about yourself..."></textarea>
+                                    <small class="form-help">Share your story, interests, or background</small>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profileWebsite">Website</label>
+                                        <input type="url" id="profileWebsite" class="form-control" placeholder="https://your-website.com">
+                                        <small class="form-help">Your personal or professional website</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profileSocial">Social Media</label>
+                                        <input type="text" id="profileSocial" class="form-control" placeholder="@yourusername or social media link">
+                                        <small class="form-help">Twitter, Instagram, or other social media</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profileEmail">Email (Optional)</label>
+                                    <input type="email" id="profileEmail" class="form-control" placeholder="your@email.com">
+                                    <small class="form-help">For contact purposes (not publicly displayed)</small>
+                                </div>
+                            </form>
+                        </div>
                     </div>
 
                     <!-- Artist-specific Information (only for registered artists) -->
