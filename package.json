@@ -10,7 +10,9 @@
     "build:github": "tsc && vite build --base=/innoart_/",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
-    "deploy": "./scripts/deploy.sh",
+    "prepare-deploy": "node prepare-deploy.js",
+    "deploy": "npm run build && npm run prepare-deploy",
+    "deploy:github": "./scripts/deploy.sh",
     "update-repo": "./scripts/update-repo.sh",
     "serve": "python3 -m http.server 8000",
     "clean": "rm -rf dist node_modules package-lock.json",
@@ -28,9 +30,10 @@
     "solidity"
   ],
   "author": "InnArt Team",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.10.5",
+    "archiver": "^5.3.1",
     "terser": "^5.43.1",
     "typescript": "^5.3.3",
     "vite": "^4.5.14"
