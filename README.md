@@ -357,7 +357,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email [llakterian@gmail.com](mailto:llakterian@gmail.com) or join our [Discord](https://discord.gg/llakterian/).
+For support, email [your-email@example.com](mailto:your-email@example.com) or join our [Discord](https://discord.gg/your-discord).
 
 ## 🗺️ Roadmap
 
@@ -381,6 +381,6 @@ For support, email [llakterian@gmail.com](mailto:llakterian@gmail.com) or join o
 
 ---
 
-**Built by Llakterian & LLM**
+**Built with ❤️ by the InnArt Team**
 
 *Empowering digital artists through decentralized technology*
