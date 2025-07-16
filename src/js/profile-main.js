@@ -1,109 +1,83 @@
-class ProfileManager {
-    constructor(wallet) {
-        this.wallet = wallet;
+// Enhanced Profile page functionality
+class ProfileApp {
+    constructor() {
+        this.walletConnection = window.walletConnection;
+        this.userStore = window.userStore;
+        this.currentUser = null;
         this.isEditing = false;
-        this.userProfile = {};
+        this.userProfile = null;
         this.init();
     }
 
-    init() {
-        document.addEventListener('DOMContentLoaded', () => {
-            this.setupEventListeners();
-            this.checkInitialWalletState();
-        });
-
-        // Listen for wallet state changes
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                this.handleAccountsChanged(accounts);
-            });
-        }
-    }
-
-    checkInitialWalletState() {
-        // Check if wallet is already connected
-        if (this.wallet && this.wallet.state.isConnected && this.wallet.state.address) {
-            this.handleAccountsChanged([this.wallet.state.address]);
-        } else {
-            // Check MetaMask directly
-            if (typeof window.ethereum !== 'undefined') {
-                window.ethereum.request({ method: 'eth_accounts' })
-                    .then(accounts => this.handleAccountsChanged(accounts))
-                    .catch(error => {
-                        console.error('Error checking wallet connection:', error);
-                        this.showWelcomeSection();
-                    });
-            } else {
-                this.showWelcomeSection();
-            }
-        }
+    async init() {
+        console.log('Initializing Enhanced Profile App...');
+        this.setupEventListeners();
+        this.checkWalletConnection();
+        console.log('Enhanced Profile App initialized');
     }
 
     setupEventListeners() {
-        // Profile editing buttons
-        const editBtn = document.getElementById('editProfileBtn');
-        const saveBtn = document.getElementById('saveProfileBtn');
-        const cancelBtn = document.getElementById('cancelEditBtn');
+        // Listen for wallet connection events
+        window.addEventListener('walletConnected', (event) => {
+            console.log('Wallet connected in profile:', event.detail.address);
+            this.handleWalletConnected(event.detail.address);
+        });
 
-        if (editBtn) editBtn.addEventListener('click', () => this.toggleEditMode());
-        if (saveBtn) saveBtn.addEventListener('click', () => this.saveProfile());
-        if (cancelBtn) cancelBtn.addEventListener('click', () => this.cancelEdit());
+        window.addEventListener('walletDisconnected', () => {
+            console.log('Wallet disconnected in profile');
+            this.handleWalletDisconnected();
+        });
 
         // Mobile menu toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const mobileMenu = document.getElementById('mobileMenu');
-
+        
         if (mobileMenuToggle && mobileMenu) {
             mobileMenuToggle.addEventListener('click', () => {
                 mobileMenu.classList.toggle('active');
             });
         }
+
+        // Profile editing buttons
+        const editBtn = document.getElementById('editProfileBtn');
+        const saveBtn = document.getElementById('saveProfileBtn');
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        
+        if (editBtn) {
+            editBtn.addEventListener('click', () => this.startEditing());
+        }
+        
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => this.saveProfile());
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => this.cancelEditing());
+        }
+
+        // Tab switching
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tab-btn')) {
+                this.switchTab(e.target.dataset.tab);
+            }
+        });
+
+        // Profile form submission
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.saveProfile();
+            });
+        }
     }
 
-    handleAccountsChanged(accounts) {
-        if (accounts.length > 0) {
-            this.loadUserProfile(accounts[0]);
-            this.showProfileContent();
-            this.loadUserNFTs(accounts[0]);
-            this.loadUserActivity(accounts[0]);
+    checkWalletConnection() {
+        if (this.walletConnection && this.walletConnection.getConnectionStatus()) {
+            const address = this.walletConnection.getWalletAddress();
+            this.handleWalletConnected(address);
         } else {
             this.showWelcomeSection();
-        }
-    }
-
-    loadUserProfile(address) {
-        this.updateUserDisplay(address);
-        const savedProfile = localStorage.getItem(`profile_${address}`);
-        if (savedProfile) {
-            try {
-                this.userProfile = JSON.parse(savedProfile);
-                this.populateProfileForm();
-            } catch (error) {
-                console.error('Error parsing saved profile:', error);
-                this.userProfile = {};
-            }
-        } else {
-            this.userProfile = {};
-        }
-    }
-
-    updateUserDisplay(address) {
-        const userName = document.getElementById('userName');
-        const userAddressDisplay = document.getElementById('userAddressDisplay');
-        const userInitials = document.getElementById('userInitials');
-
-        if (userName) {
-            userName.textContent = this.userProfile.artistName || `${address.slice(0, 6)}...${address.slice(-4)}`;
-        }
-        
-        if (userAddressDisplay) {
-            userAddressDisplay.textContent = address;
-        }
-        
-        if (userInitials) {
-            userInitials.textContent = this.userProfile.artistName 
-                ? this.userProfile.artistName.charAt(0).toUpperCase() 
-                : address.charAt(2).toUpperCase();
         }
     }
 
@@ -115,108 +89,395 @@ class ProfileManager {
         if (profileContent) profileContent.style.display = 'none';
     }
 
+    handleWalletConnected(address) {
+        console.log('Handling wallet connection for:', address);
+        
+        this.currentUser = address;
+        this.showProfileContent();
+        this.loadUserProfile(address);
+        this.loadUserNFTs(address);
+        this.checkArtistStatus(address);
+    }
+
+    handleWalletDisconnected() {
+        this.currentUser = null;
+        this.userProfile = null;
+        this.showWelcomeSection();
+    }
+
     showProfileContent() {
         const welcomeSection = document.getElementById('welcomeSection');
         const profileContent = document.getElementById('profileContent');
         
         if (welcomeSection) welcomeSection.style.display = 'none';
-        if (profileContent) profileContent.style.display = 'grid';
+        if (profileContent) profileContent.style.display = 'block';
+        
+        // Update address display
+        this.updateAddressDisplay();
     }
 
-    toggleEditMode() {
-        this.isEditing = !this.isEditing;
-        const form = document.getElementById('artistProfileForm');
-        const editBtn = document.getElementById('editProfileBtn');
-        const saveBtn = document.getElementById('saveProfileBtn');
-        const cancelBtn = document.getElementById('cancelEditBtn');
-
-        if (form) form.style.display = this.isEditing ? 'block' : 'none';
-        if (editBtn) editBtn.style.display = this.isEditing ? 'none' : 'block';
-        if (saveBtn) saveBtn.style.display = this.isEditing ? 'block' : 'none';
-        if (cancelBtn) cancelBtn.style.display = this.isEditing ? 'block' : 'none';
-
-        if (this.isEditing) {
-            this.populateProfileForm();
+    updateAddressDisplay() {
+        const userAddress = document.getElementById('userAddress');
+        const userAddressDisplay = document.getElementById('userAddressDisplay');
+        const userInitials = document.getElementById('userInitials');
+        
+        if (this.currentUser) {
+            const shortAddress = this.formatAddress(this.currentUser);
+            
+            if (userAddress) {
+                userAddress.textContent = this.userProfile?.profileName || shortAddress;
+            }
+            if (userAddressDisplay) userAddressDisplay.textContent = this.currentUser;
+            if (userInitials) {
+                const initials = this.userProfile?.profileName 
+                    ? this.userProfile.profileName.substring(0, 2).toUpperCase()
+                    : this.currentUser.substring(2, 4).toUpperCase();
+                userInitials.textContent = initials;
+            }
         }
     }
 
-    cancelEdit() {
-        this.isEditing = false;
-        const form = document.getElementById('artistProfileForm');
-        const editBtn = document.getElementById('editProfileBtn');
-        const saveBtn = document.getElementById('saveProfileBtn');
-        const cancelBtn = document.getElementById('cancelEditBtn');
-
-        if (form) form.style.display = 'none';
-        if (editBtn) editBtn.style.display = 'block';
-        if (saveBtn) saveBtn.style.display = 'none';
-        if (cancelBtn) cancelBtn.style.display = 'none';
-
-        // Reset form to original values
-        this.populateProfileForm();
+    loadUserProfile(address) {
+        // Load user profile from storage
+        this.userProfile = this.userStore.getUserProfile(address) || {};
+        
+        // Display profile information
+        this.displayProfileInfo();
+        
+        // Populate edit form with current data
+        this.populateEditForm();
     }
 
-    populateProfileForm() {
-        const fields = ['artistName', 'artistBio', 'artistWebsite', 'artistSocial', 'artistEmail', 'artistLocation'];
-        
-        fields.forEach(field => {
-            const element = document.getElementById(field);
+    displayProfileInfo() {
+        const fields = {
+            displayName: this.userProfile.profileName || 'Not set',
+            displayBio: this.userProfile.profileBio || 'No bio provided',
+            displayWebsite: this.userProfile.profileWebsite || 'Not provided',
+            displaySocial: this.userProfile.profileSocial || 'Not provided',
+            displayEmail: this.userProfile.profileEmail || 'Not provided',
+            displayLocation: this.userProfile.profileLocation || 'Not provided'
+        };
+
+        Object.entries(fields).forEach(([elementId, value]) => {
+            const element = document.getElementById(elementId);
             if (element) {
-                element.value = this.userProfile[field] || '';
+                if (elementId === 'displayWebsite' && value !== 'Not provided') {
+                    element.innerHTML = `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+                } else if (elementId === 'displaySocial' && value !== 'Not provided') {
+                    const isUrl = value.startsWith('http');
+                    element.innerHTML = isUrl 
+                        ? `<a href="${value}" target="_blank" rel="noopener">${value}</a>`
+                        : value;
+                } else {
+                    element.textContent = value;
+                }
             }
         });
     }
 
-    sanitizeInput(input) {
-        if (!input) return '';
-        const temp = document.createElement('div');
-        temp.textContent = input;
-        return temp.innerHTML;
+    populateEditForm() {
+        const fields = {
+            profileName: this.userProfile.profileName || '',
+            profileBio: this.userProfile.profileBio || '',
+            profileWebsite: this.userProfile.profileWebsite || '',
+            profileSocial: this.userProfile.profileSocial || '',
+            profileEmail: this.userProfile.profileEmail || '',
+            profileLocation: this.userProfile.profileLocation || ''
+        };
+
+        Object.entries(fields).forEach(([fieldId, value]) => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                element.value = value;
+            }
+        });
+    }
+
+    checkArtistStatus(address) {
+        const isArtist = this.userStore.isArtistRegistered(address);
+        const artistStatus = document.getElementById('artistStatus');
+        const nonArtistStatus = document.getElementById('nonArtistStatus');
+        const artistInfo = document.getElementById('artistInfo');
+        const createdTab = document.getElementById('createdTab');
+        
+        if (isArtist) {
+            if (artistStatus) artistStatus.style.display = 'block';
+            if (nonArtistStatus) nonArtistStatus.style.display = 'none';
+            if (artistInfo) artistInfo.style.display = 'block';
+            if (createdTab) createdTab.style.display = 'block';
+            
+            this.loadArtistStats(address);
+            this.loadCreatedNFTs(address);
+        } else {
+            if (artistStatus) artistStatus.style.display = 'none';
+            if (nonArtistStatus) nonArtistStatus.style.display = 'block';
+            if (artistInfo) artistInfo.style.display = 'none';
+            if (createdTab) createdTab.style.display = 'none';
+        }
+    }
+
+    loadArtistStats(address) {
+        const artist = this.userStore.getArtist(address);
+        const userNFTs = this.userStore.getUserNFTs(address);
+        
+        if (artist) {
+            const totalNFTs = document.getElementById('totalNFTsCreated');
+            const totalSales = document.getElementById('totalSales');
+            const totalEarnings = document.getElementById('totalEarnings');
+            const registrationDate = document.getElementById('registrationDate');
+            
+            if (totalNFTs) totalNFTs.textContent = userNFTs.length;
+            if (totalSales) totalSales.textContent = artist.totalSales || 0;
+            if (totalEarnings) totalEarnings.textContent = `${artist.totalEarnings || '0'} ETH`;
+            if (registrationDate && artist.registrationDate) {
+                const date = new Date(artist.registrationDate);
+                registrationDate.textContent = date.toLocaleDateString();
+            }
+        }
+    }
+
+    startEditing() {
+        this.isEditing = true;
+        
+        const editBtn = document.getElementById('editProfileBtn');
+        const saveBtn = document.getElementById('saveProfileBtn');
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        const profileDisplay = document.getElementById('profileDisplay');
+        const profileEditForm = document.getElementById('profileEditForm');
+        
+        if (editBtn) editBtn.style.display = 'none';
+        if (saveBtn) saveBtn.style.display = 'inline-block';
+        if (cancelBtn) cancelBtn.style.display = 'inline-block';
+        if (profileDisplay) profileDisplay.style.display = 'none';
+        if (profileEditForm) profileEditForm.style.display = 'block';
+    }
+
+    cancelEditing() {
+        this.isEditing = false;
+        
+        const editBtn = document.getElementById('editProfileBtn');
+        const saveBtn = document.getElementById('saveProfileBtn');
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        const profileDisplay = document.getElementById('profileDisplay');
+        const profileEditForm = document.getElementById('profileEditForm');
+        
+        if (editBtn) editBtn.style.display = 'inline-block';
+        if (saveBtn) saveBtn.style.display = 'none';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+        if (profileDisplay) profileDisplay.style.display = 'block';
+        if (profileEditForm) profileEditForm.style.display = 'none';
+        
+        // Reset form to original values
+        this.populateEditForm();
     }
 
     saveProfile() {
-        const address = this.wallet?.state?.address;
-        if (!address) {
-            this.showMessage('Please connect your wallet first.', 'error');
-            return;
-        }
-
-        const formData = {
-            artistName: this.sanitizeInput(document.getElementById('artistName')?.value),
-            artistBio: this.sanitizeInput(document.getElementById('artistBio')?.value),
-            artistWebsite: this.sanitizeInput(document.getElementById('artistWebsite')?.value),
-            artistSocial: this.sanitizeInput(document.getElementById('artistSocial')?.value),
-            artistEmail: this.sanitizeInput(document.getElementById('artistEmail')?.value),
-            artistLocation: this.sanitizeInput(document.getElementById('artistLocation')?.value),
+        if (!this.currentUser) return;
+        
+        // Get form data
+        const profileData = {
+            profileName: document.getElementById('profileName')?.value.trim() || '',
+            profileBio: document.getElementById('profileBio')?.value.trim() || '',
+            profileWebsite: document.getElementById('profileWebsite')?.value.trim() || '',
+            profileSocial: document.getElementById('profileSocial')?.value.trim() || '',
+            profileEmail: document.getElementById('profileEmail')?.value.trim() || '',
+            profileLocation: document.getElementById('profileLocation')?.value.trim() || ''
         };
-
-        // Basic validation
-        if (!formData.artistName.trim()) {
-            this.showMessage('Artist name is required.', 'error');
+        
+        // Validate required fields
+        if (!profileData.profileName) {
+            this.showMessage('Display name is required', 'error');
             return;
         }
-
-        // Email validation if provided
-        if (formData.artistEmail && !this.isValidEmail(formData.artistEmail)) {
-            this.showMessage('Please enter a valid email address.', 'error');
+        
+        // Validate website URL if provided
+        if (profileData.profileWebsite && !this.isValidUrl(profileData.profileWebsite)) {
+            this.showMessage('Please enter a valid website URL', 'error');
             return;
         }
-
-        // URL validation if provided
-        if (formData.artistWebsite && !this.isValidURL(formData.artistWebsite)) {
-            this.showMessage('Please enter a valid website URL.', 'error');
+        
+        // Validate email if provided
+        if (profileData.profileEmail && !this.isValidEmail(profileData.profileEmail)) {
+            this.showMessage('Please enter a valid email address', 'error');
             return;
         }
+        
+        // Save to user store
+        this.userStore.saveUserProfile(this.currentUser, profileData);
+        this.userProfile = { ...this.userProfile, ...profileData };
+        
+        // Update displays
+        this.displayProfileInfo();
+        this.updateAddressDisplay();
+        
+        // Show success message
+        this.showMessage('Profile saved successfully!', 'success');
+        
+        // Exit edit mode
+        this.cancelEditing();
+    }
 
+    switchTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        
+        // Update tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+            content.style.display = 'none';
+        });
+        
+        const activeContent = document.getElementById(`${tabName}NFTs`);
+        if (activeContent) {
+            activeContent.classList.add('active');
+            activeContent.style.display = 'block';
+        }
+    }
+
+    loadUserNFTs(address) {
+        // Load owned NFTs (purchased by user)
+        const allNFTs = this.userStore.getNFTs();
+        const ownedNFTs = allNFTs.filter(nft => nft.owner === address);
+        
+        this.renderNFTGrid('userNFTGrid', ownedNFTs, 'owned');
+    }
+
+    loadCreatedNFTs(address) {
+        // Load created NFTs (created by user)
+        const createdNFTs = this.userStore.getUserNFTs(address);
+        this.renderNFTGrid('artistNFTGrid', createdNFTs, 'created');
+    }
+
+    renderNFTGrid(gridId, nfts, type) {
+        const nftGrid = document.getElementById(gridId);
+        if (!nftGrid) return;
+        
+        if (nfts.length === 0) {
+            const emptyMessage = type === 'owned' 
+                ? 'You don\'t own any NFTs yet. Explore the gallery to start your collection!'
+                : 'You haven\'t created any NFTs yet. Start your artistic journey!';
+            
+            const emptyLink = type === 'owned' 
+                ? '<a href="gallery.html" class="btn btn-primary">Browse Gallery</a>'
+                : '<a href="upload.html" class="btn btn-primary">Create NFT</a>';
+            
+            nftGrid.innerHTML = `
+                <div class="empty-state">
+                    <h4>No NFTs ${type === 'owned' ? 'Owned' : 'Created'}</h4>
+                    <p>${emptyMessage}</p>
+                    ${emptyLink}
+                </div>
+            `;
+            return;
+        }
+        
+        nftGrid.innerHTML = nfts.map(nft => `
+            <div class="nft-item">
+                <img src="${this.getNFTImage(nft)}" alt="${nft.name}" loading="lazy">
+                <div class="nft-item-info">
+                    <div class="nft-item-title">${nft.name}</div>
+                    <div class="nft-item-price">${nft.price} ETH</div>
+                    <div class="nft-item-status ${this.getNFTStatusClass(nft)}">
+                        ${this.getNFTStatusText(nft)}
+                    </div>
+                    ${type === 'created' ? this.getCreatorActions(nft) : ''}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    getNFTStatusClass(nft) {
+        if (nft.sold) return 'sold';
+        if (nft.forSale) return 'for-sale';
+        return 'not-for-sale';
+    }
+
+    getNFTStatusText(nft) {
+        if (nft.sold) return 'Sold';
+        if (nft.forSale) return 'For Sale';
+        return 'Not for Sale';
+    }
+
+    getCreatorActions(nft) {
+        if (nft.sold) return '';
+        
+        const toggleText = nft.forSale ? 'Remove from Sale' : 'Put on Sale';
+        return `
+            <div class="action-buttons">
+                <button class="btn-toggle" onclick="profileApp.toggleNFTSale('${nft.id}')">
+                    ${toggleText}
+                </button>
+            </div>
+        `;
+    }
+
+    toggleNFTSale(nftId) {
+        if (!this.currentUser) return;
+        
+        const updatedNFT = this.userStore.toggleNFTSale(nftId, this.currentUser);
+        if (updatedNFT) {
+            const message = updatedNFT.forSale 
+                ? 'NFT is now available for sale'
+                : 'NFT removed from sale';
+            this.showMessage(message, 'success');
+            
+            // Refresh the created NFTs display
+            this.loadCreatedNFTs(this.currentUser);
+        } else {
+            this.showMessage('Failed to update NFT status', 'error');
+        }
+    }
+
+    getNFTImage(nft) {
+        if (nft.image && window.imageHandler) {
+            const imageData = window.imageHandler.getImage(nft.image);
+            if (imageData) {
+                return imageData.data;
+            }
+        }
+        
+        // Fallback to generated image
+        return this.generateNFTImage(nft.id, nft.name);
+    }
+
+    generateNFTImage(id, title) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 300;
+        canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, 300, 300);
+        gradient.addColorStop(0, '#6366f1');
+        gradient.addColorStop(1, '#ec4899');
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 300, 300);
+
+        // Add text
+        ctx.fillStyle = 'white';
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎨', 150, 130);
+
+        ctx.font = '16px Arial';
+        ctx.fillText(title || 'NFT', 150, 160);
+
+        ctx.font = '12px Arial';
+        ctx.fillText(`ID: ${id}`, 150, 180);
+
+        return canvas.toDataURL();
+    }
+
+    isValidUrl(string) {
         try {
-            localStorage.setItem(`profile_${address}`, JSON.stringify(formData));
-            this.userProfile = formData;
-            this.updateUserDisplay(address);
-            this.toggleEditMode();
-            this.showMessage('Profile saved successfully!', 'success');
-        } catch (error) {
-            console.error('Error saving profile:', error);
-            this.showMessage('Error saving profile. Please try again.', 'error');
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
         }
     }
 
@@ -225,118 +486,24 @@ class ProfileManager {
         return emailRegex.test(email);
     }
 
-    isValidURL(url) {
-        try {
-            new URL(url);
-            return true;
-        } catch {
-            return false;
+    formatAddress(address) {
+        if (!address) return '';
+        return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
+    }
+
+    showMessage(message, type = 'info') {
+        if (this.walletConnection && this.walletConnection.showMessage) {
+            this.walletConnection.showMessage(message, type);
+        } else {
+            console.log(`[${type.toUpperCase()}] ${message}`);
         }
-    }
-
-    loadUserNFTs(address) {
-        // Load NFTs from localStorage (in a real app, this would be from blockchain)
-        const nfts = JSON.parse(localStorage.getItem('userNFTs') || '[]');
-        const userNFTs = nfts.filter(nft => nft.owner === address);
-        
-        this.displayNFTs(userNFTs);
-        this.updateStats(address, userNFTs);
-    }
-
-    displayNFTs(nfts) {
-        const nftGrid = document.getElementById('userNFTGrid');
-        if (!nftGrid) return;
-
-        if (nfts.length === 0) {
-            nftGrid.innerHTML = `
-                <div class="empty-state">
-                    <h3>No NFTs Found</h3>
-                    <p>You don't own any NFTs yet. Explore the gallery to start your collection!</p>
-                    <a href="gallery.html" class="btn btn-primary">Browse Gallery</a>
-                </div>
-            `;
-            return;
-        }
-
-        nftGrid.innerHTML = nfts.map(nft => `
-            <div class="nft-card" onclick="this.viewNFT('${nft.id}')">
-                <div class="nft-image">
-                    ${nft.image ? `<img src="${nft.image}" alt="${nft.title}" style="width: 100%; height: 100%; object-fit: cover;">` : '🎨'}
-                </div>
-                <div class="nft-info">
-                    <div class="nft-name">${nft.title}</div>
-                    <div class="nft-price">${nft.price} ETH</div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    updateStats(address, userNFTs) {
-        // Update NFT count
-        const nftCount = document.getElementById('nftCount');
-        if (nftCount) nftCount.textContent = userNFTs.length;
-
-        // Load created NFTs count
-        const createdNFTs = JSON.parse(localStorage.getItem('createdNFTs') || '[]');
-        const userCreated = createdNFTs.filter(nft => nft.creator === address);
-        const createdCount = document.getElementById('createdCount');
-        if (createdCount) createdCount.textContent = userCreated.length;
-
-        // Load sold count and earnings (placeholder logic)
-        const soldCount = document.getElementById('soldCount');
-        const totalEarnings = document.getElementById('totalEarnings');
-        
-        if (soldCount) soldCount.textContent = '0'; // Placeholder
-        if (totalEarnings) totalEarnings.textContent = '0.0'; // Placeholder
-    }
-
-    loadUserActivity(address) {
-        // Load user activity from localStorage (placeholder)
-        const activityList = document.getElementById('activityList');
-        if (!activityList) return;
-
-        // For now, show empty state
-        activityList.innerHTML = `
-            <div class="empty-state">
-                <h3>No Activity Yet</h3>
-                <p>Your recent transactions and activities will appear here.</p>
-            </div>
-        `;
-    }
-
-    showMessage(message, type = 'info', duration = 5000) {
-        // Remove existing messages
-        const existingMessages = document.querySelectorAll('.profile-message');
-        existingMessages.forEach(msg => msg.remove());
-
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-        messageDiv.textContent = message;
-        
-        document.body.appendChild(messageDiv);
-
-        setTimeout(() => {
-            messageDiv.remove();
-        }, duration);
-    }
-
-    viewNFT(nftId) {
-        // Navigate to NFT detail view (placeholder)
-        console.log('Viewing NFT:', nftId);
     }
 }
 
-// Initialize ProfileManager when wallet is available
-if (typeof window !== 'undefined') {
-    document.addEventListener('DOMContentLoaded', () => {
-        // Wait for wallet to be initialized
-        const initProfile = () => {
-            if (window.wallet) {
-                new ProfileManager(window.wallet);
-            } else {
-                setTimeout(initProfile, 100);
-            }
-        };
-        initProfile();
-    });
-}
+// Initialize profile app
+document.addEventListener('DOMContentLoaded', () => {
+    window.profileApp = new ProfileApp();
+});
+
+// Export for global access
+window.ProfileApp = ProfileApp;

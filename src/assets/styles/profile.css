@@ -415,6 +415,140 @@ textarea.form-control {
     margin-right: 1rem;
 }
 
+/* Artist Status */
+.artist-status {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.status-badge.verified {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.status-badge.unverified {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.status-icon {
+    font-weight: 700;
+}
+
+/* Profile Information Display */
+.profile-info-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item label {
+    font-weight: 600;
+    color: var(--text-dark);
+    min-width: 120px;
+}
+
+.info-item span {
+    color: var(--text-light);
+    text-align: right;
+    flex: 1;
+    word-break: break-word;
+}
+
+/* Form Help Text */
+.form-help {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+    font-style: italic;
+}
+
+/* Collection Tabs */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.collection-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-dark);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Button Variants */
+.btn-success {
+    background: var(--success-color);
+    color: white;
+    border: none;
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+/* Enhanced Empty State */
+.empty-state h4 {
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.empty-state p {
+    margin-bottom: 1.5rem;
+}
+
 /* Success/Error Messages */
 .profile-message {
     padding: 1rem;
@@ -439,4 +573,32 @@ textarea.form-control {
     background: rgba(99, 102, 241, 0.1);
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .info-item label {
+        min-width: auto;
+    }
+    
+    .info-item span {
+        text-align: left;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .collection-tabs {
+        width: 100%;
+        justify-content: center;
+    }
 }
