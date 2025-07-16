@@ -1,7 +1,8 @@
-// Upload page with working wallet connection
+// Upload page with working wallet connection and drag-drop functionality
 class UploadApp {
     constructor() {
-        this.walletConnection = window.walletConnection;
+        this.selectedFile = null;
+        this.selectedCategory = null;
         this.init();
     }
 
@@ -34,25 +35,97 @@ class UploadApp {
             });
         }
 
-        // File upload
-        const fileInput = document.getElementById('artworkFile');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const mintBtn = document.getElementById('mintNFT');
+        // Image upload functionality
+        this.setupImageUpload();
+        
+        // Category selection
+        this.setupCategorySelection();
+        
+        // Form submission
+        this.setupFormSubmission();
+    }
 
+    setupImageUpload() {
+        const fileInput = document.getElementById('nftImage');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImage = document.getElementById('previewImage');
+        const uploadPlaceholder = imagePreview.querySelector('.upload-placeholder');
+
+        // File input change event
         if (fileInput) {
             fileInput.addEventListener('change', (e) => {
-                this.handleFileSelect(e);
+                this.handleFileSelect(e.target.files[0]);
             });
         }
 
-        if (uploadBtn) {
-            uploadBtn.addEventListener('click', () => {
+        // Click to upload
+        if (imagePreview) {
+            imagePreview.addEventListener('click', () => {
                 fileInput?.click();
             });
         }
 
-        if (mintBtn) {
-            mintBtn.addEventListener('click', () => {
+        // Drag and drop functionality
+        if (imagePreview) {
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                imagePreview.addEventListener(eventName, this.preventDefaults, false);
+                document.body.addEventListener(eventName, this.preventDefaults, false);
+            });
+
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                imagePreview.addEventListener(eventName, () => {
+                    imagePreview.classList.add('drag-over');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                imagePreview.addEventListener(eventName, () => {
+                    imagePreview.classList.remove('drag-over');
+                }, false);
+            });
+
+            // Handle dropped files
+            imagePreview.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.handleFileSelect(files[0]);
+                }
+            }, false);
+        }
+    }
+
+    preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    setupCategorySelection() {
+        const categoryOptions = document.querySelectorAll('.category-option');
+        
+        categoryOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all options
+                categoryOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add active class to clicked option
+                option.classList.add('selected');
+                
+                // Store selected category
+                this.selectedCategory = option.dataset.category;
+            });
+        });
+    }
+
+    setupFormSubmission() {
+        const form = document.getElementById('nftUploadForm');
+        
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
                 this.handleMintNFT();
             });
         }
@@ -111,50 +184,80 @@ class UploadApp {
         if (connectPrompt) connectPrompt.style.display = 'none';
     }
 
-    handleFileSelect(event) {
-        const file = event.target.files[0];
+    handleFileSelect(file) {
         if (!file) return;
 
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type.toLowerCase())) {
+            this.showMessage('Please select a valid image file (JPEG, PNG, GIF, WebP)', 'error');
+            return;
+        }
+
+        // Validate file size (10MB max)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            this.showMessage('File size must be less than 10MB', 'error');
+            return;
+        }
+
+        // Store the selected file
+        this.selectedFile = file;
+
+        // Show preview
         const preview = document.getElementById('previewImage');
-        const uploadArea = document.querySelector('.upload-area');
+        const placeholder = document.querySelector('.upload-placeholder');
+        const imagePreview = document.getElementById('imagePreview');
         
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                if (preview) {
+                if (preview && placeholder && imagePreview) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
-                }
-                if (uploadArea) {
-                    uploadArea.classList.add('has-file');
+                    placeholder.style.display = 'none';
+                    imagePreview.classList.add('has-image');
                 }
             };
             reader.readAsDataURL(file);
-        } else {
-            this.walletConnection.showMessage('Please select an image file.', 'error');
         }
     }
 
     async handleMintNFT() {
-        if (!this.walletConnection.getConnectionStatus()) {
-            this.walletConnection.showMessage('Please connect your wallet first.', 'error');
+        // Check wallet connection
+        if (!(window.walletState && window.walletState.isConnected)) {
+            this.showMessage('Please connect your wallet first.', 'error');
             return;
         }
 
-        const walletAddress = this.walletConnection.getWalletAddress();
-        const title = document.getElementById('nftTitle')?.value;
-        const description = document.getElementById('nftDescription')?.value;
+        // Get form data
+        const title = document.getElementById('nftTitle')?.value?.trim();
+        const description = document.getElementById('nftDescription')?.value?.trim();
         const price = document.getElementById('nftPrice')?.value;
-        const fileInput = document.getElementById('artworkFile');
+        const royalty = document.getElementById('royaltyPercentage')?.value || 5;
 
-        if (!title || !description || !price || !fileInput?.files[0]) {
-            this.walletConnection.showMessage('Please fill in all fields and select an image.', 'error');
+        // Validate required fields
+        if (!title || !price || !this.selectedFile) {
+            this.showMessage('Please fill in all required fields and select an image.', 'error');
             return;
         }
+
+        if (!this.selectedCategory) {
+            this.showMessage('Please select a category for your NFT.', 'error');
+            return;
+        }
+
+        // Validate price
+        if (parseFloat(price) <= 0) {
+            this.showMessage('Price must be greater than 0 ETH.', 'error');
+            return;
+        }
+
+        const walletAddress = window.walletState.address;
 
         // Check if user is registered as artist
         if (!window.userStore.isArtistRegistered(walletAddress)) {
-            this.walletConnection.showMessage('You must be a registered artist to mint NFTs.', 'error');
+            this.showMessage('You must be a registered artist to mint NFTs.', 'error');
             setTimeout(() => {
                 window.location.href = 'artist-register.html';
             }, 2000);
@@ -162,73 +265,157 @@ class UploadApp {
         }
 
         // Show loading state
-        const mintBtn = document.getElementById('mintNFT');
-        const originalText = mintBtn?.textContent;
-        if (mintBtn) {
-            mintBtn.textContent = 'Minting NFT...';
-            mintBtn.disabled = true;
+        const submitBtn = document.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
+        const progressBar = document.getElementById('uploadProgress');
+        const progressFill = document.getElementById('progressFill');
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline-block';
+        }
+
+        if (progressBar) {
+            progressBar.style.display = 'block';
         }
 
         try {
+            // Simulate upload progress
+            this.updateProgress(progressFill, 20);
+            
             // Process image upload
-            const imageResult = await window.imageHandler.processImage(fileInput.files[0]);
+            const imageResult = await window.imageHandler.processImage(this.selectedFile);
+            this.updateProgress(progressFill, 60);
             
             // Create NFT data
             const nftData = {
                 name: title,
-                description: description,
-                price: price,
+                description: description || 'No description provided',
+                price: parseFloat(price),
                 creator: walletAddress,
                 image: imageResult.imageId,
-                category: 'art' // Default category
+                category: this.selectedCategory,
+                royalty: parseInt(royalty),
+                createdAt: Date.now(),
+                status: 'for-sale'
             };
+
+            this.updateProgress(progressFill, 80);
 
             // Create NFT in storage
             const newNFT = window.userStore.createNFT(nftData);
+            this.updateProgress(progressFill, 100);
             
-            // Simulate blockchain minting delay
+            // Show success message
             setTimeout(() => {
-                this.walletConnection.showMessage(`NFT "${title}" minted successfully!`, 'success');
+                this.showMessage(`NFT "${title}" created successfully!`, 'success');
                 this.resetForm();
                 
-                if (mintBtn) {
-                    mintBtn.textContent = originalText;
-                    mintBtn.disabled = false;
+                // Reset button state
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                }
+                
+                if (progressBar) {
+                    progressBar.style.display = 'none';
                 }
                 
                 // Redirect to profile to view the new NFT
                 setTimeout(() => {
                     window.location.href = 'profile.html';
                 }, 2000);
-            }, 2000);
+            }, 1000);
             
         } catch (error) {
             console.error('Minting error:', error);
-            this.walletConnection.showMessage('Failed to mint NFT: ' + error.message, 'error');
+            this.showMessage('Failed to create NFT: ' + error.message, 'error');
             
-            if (mintBtn) {
-                mintBtn.textContent = originalText;
-                mintBtn.disabled = false;
+            // Reset button state
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+            
+            if (progressBar) {
+                progressBar.style.display = 'none';
             }
         }
     }
 
+    updateProgress(progressElement, percentage) {
+        if (progressElement) {
+            progressElement.style.width = percentage + '%';
+        }
+    }
+
+    showMessage(message, type = 'info') {
+        // Create or update message element
+        let messageEl = document.getElementById('uploadMessage');
+        if (!messageEl) {
+            messageEl = document.createElement('div');
+            messageEl.id = 'uploadMessage';
+            messageEl.className = 'upload-message';
+            
+            const form = document.getElementById('nftUploadForm');
+            if (form) {
+                form.insertBefore(messageEl, form.firstChild);
+            }
+        }
+
+        messageEl.className = `upload-message ${type}`;
+        messageEl.textContent = message;
+        messageEl.style.display = 'block';
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (messageEl) {
+                messageEl.style.display = 'none';
+            }
+        }, 5000);
+    }
+
     resetForm() {
-        const form = document.getElementById('uploadForm');
+        // Reset the form
+        const form = document.getElementById('nftUploadForm');
         if (form) {
             form.reset();
         }
         
+        // Reset image preview
         const preview = document.getElementById('previewImage');
-        const uploadArea = document.querySelector('.upload-area');
+        const placeholder = document.querySelector('.upload-placeholder');
+        const imagePreview = document.getElementById('imagePreview');
         
         if (preview) {
             preview.style.display = 'none';
             preview.src = '';
         }
         
-        if (uploadArea) {
-            uploadArea.classList.remove('has-file');
+        if (placeholder) {
+            placeholder.style.display = 'block';
+        }
+        
+        if (imagePreview) {
+            imagePreview.classList.remove('has-image');
+        }
+        
+        // Reset category selection
+        const categoryOptions = document.querySelectorAll('.category-option');
+        categoryOptions.forEach(opt => opt.classList.remove('selected'));
+        
+        // Reset internal state
+        this.selectedFile = null;
+        this.selectedCategory = null;
+        
+        // Hide any messages
+        const messageEl = document.getElementById('uploadMessage');
+        if (messageEl) {
+            messageEl.style.display = 'none';
         }
     }
 }
