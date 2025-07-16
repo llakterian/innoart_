@@ -35,8 +35,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/innoart-nft.git
-   cd innoart-nft
+   git clone https://github.com/llakterian/innoart_.git
+   cd innoart_
    ```
 
 2. **Install dependencies**
