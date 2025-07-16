@@ -357,7 +357,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email [your-email@example.com](mailto:your-email@example.com) or join our [Discord](https://discord.gg/your-discord).
+For support, email [llakterian@gmail.com](mailto:llakterian@gmail.com) or join our [Discord](https://discord.gg/llakterian).
 
 ## 🗺️ Roadmap
 
