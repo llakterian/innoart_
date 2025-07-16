@@ -35,8 +35,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/innoart-nft.git
-   cd innoart-nft
+   git clone https://github.com/llakterian/innoart_.git
+   cd innoart_
    ```
 
 2. **Install dependencies**
@@ -357,7 +357,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email [your-email@example.com](mailto:your-email@example.com) or join our [Discord](https://discord.gg/your-discord).
+For support, email [llakterian@gmail.com](mailto:llakterian@gmail.com) or join our [Discord](https://discord.gg/llakterian).
 
 ## 🗺️ Roadmap
 
