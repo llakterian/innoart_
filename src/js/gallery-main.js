@@ -1,7 +1,6 @@
 // Gallery page with working wallet connection
 class GalleryApp {
     constructor() {
-        this.walletConnection = window.walletConnection;
         this.nfts = [];
         this.filteredNFTs = [];
         this.currentFilter = 'all';
@@ -9,18 +8,13 @@ class GalleryApp {
     }
 
     async init() {
+        console.log('Initializing Gallery App...');
         this.setupEventListeners();
         await this.loadNFTs();
+        console.log('Gallery App initialized');
     }
 
     setupEventListeners() {
-        // Connect wallet button
-        document.addEventListener('click', (e) => {
-            if (e.target.id === 'connectWallet') {
-                this.handleWalletConnection();
-            }
-        });
-
         // Mobile menu toggle
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -51,27 +45,15 @@ class GalleryApp {
                 this.searchNFTs(e.target.value);
             });
         }
-    }
 
-    async handleWalletConnection() {
-        const connectButton = document.getElementById('connectWallet');
-        
-        if (this.walletConnection.getConnectionStatus()) {
-            // Already connected, disconnect
-            this.walletConnection.disconnect();
-        } else {
-            // Not connected, try to connect
-            connectButton.textContent = 'Connecting...';
-            connectButton.classList.add('btn-connecting');
-            
-            const success = await this.walletConnection.connectWallet();
-            
-            if (!success) {
-                // Reset button state if connection failed
-                connectButton.textContent = 'Connect Wallet';
-                connectButton.classList.remove('btn-connecting');
-            }
-        }
+        // Listen for wallet connection events
+        window.addEventListener('walletConnected', () => {
+            console.log('Wallet connected in gallery');
+        });
+
+        window.addEventListener('walletDisconnected', () => {
+            console.log('Wallet disconnected in gallery');
+        });
     }
 
     async loadNFTs() {
@@ -273,7 +255,7 @@ class GalleryApp {
         }
         
         if (!nft) {
-            this.walletConnection.showMessage('NFT not found.', 'error');
+            window.walletConnection.showMessage('NFT not found.', 'error');
             return;
         }
         
@@ -400,12 +382,12 @@ class GalleryApp {
     }
 
     buyNFT(id) {
-        if (!this.walletConnection.getConnectionStatus()) {
-            this.walletConnection.showMessage('Please connect your wallet first to buy NFTs.', 'error');
+        if (!window.walletConnection.getConnectionStatus()) {
+            window.walletConnection.showMessage('Please connect your wallet first to buy NFTs.', 'error');
             return;
         }
         
-        const buyerAddress = this.walletConnection.getWalletAddress();
+        const buyerAddress = window.walletConnection.getWalletAddress();
         
         // First check in displayed NFTs
         let nft = this.nfts.find(nft => nft.id === id);
@@ -416,24 +398,24 @@ class GalleryApp {
         }
         
         if (!nft) {
-            this.walletConnection.showMessage('NFT not found. Please refresh the page.', 'error');
+            window.walletConnection.showMessage('NFT not found. Please refresh the page.', 'error');
             console.error('NFT not found with ID:', id);
             console.log('Available NFTs:', this.nfts.map(n => n.id));
             return;
         }
         
         if (nft.creator === buyerAddress) {
-            this.walletConnection.showMessage('You cannot buy your own NFT.', 'error');
+            window.walletConnection.showMessage('You cannot buy your own NFT.', 'error');
             return;
         }
         
         if (nft.sold) {
-            this.walletConnection.showMessage('This NFT has already been sold.', 'error');
+            window.walletConnection.showMessage('This NFT has already been sold.', 'error');
             return;
         }
         
         if (!nft.forSale) {
-            this.walletConnection.showMessage('This NFT is not currently for sale.', 'error');
+            window.walletConnection.showMessage('This NFT is not currently for sale.', 'error');
             return;
         }
         
@@ -500,7 +482,7 @@ class GalleryApp {
             modal.remove();
         }
         
-        this.walletConnection.showMessage('Processing purchase...', 'info');
+        window.walletConnection.showMessage('Processing purchase...', 'info');
         
         try {
             // Get NFT details
@@ -542,7 +524,7 @@ class GalleryApp {
                 const result = window.userStore.purchaseNFT(nftId, buyerAddress);
                 
                 if (result.success) {
-                    this.walletConnection.showMessage(
+                    window.walletConnection.showMessage(
                         `NFT purchased successfully! Artist: ${blockchainResult.artistTransaction}, Platform: ${blockchainResult.developerTransaction}`, 
                         'success'
                     );
@@ -554,7 +536,7 @@ class GalleryApp {
                     // Refresh NFTs
                     this.loadNFTs();
                 } else {
-                    this.walletConnection.showMessage(result.message, 'error');
+                    window.walletConnection.showMessage(result.message, 'error');
                 }
             } else {
                 throw new Error(blockchainResult.error || 'Blockchain transaction failed');
@@ -562,7 +544,7 @@ class GalleryApp {
             
         } catch (error) {
             console.error('Purchase error:', error);
-            this.walletConnection.showMessage(`Purchase failed: ${error.message}`, 'error');
+            window.walletConnection.showMessage(`Purchase failed: ${error.message}`, 'error');
         }
     }
     

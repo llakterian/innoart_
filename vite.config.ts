@@ -2,14 +2,13 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  root: 'src',
   base: './',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'src/index.html'),
+        main: resolve(__dirname, 'index.html'),
         gallery: resolve(__dirname, 'src/pages/gallery.html'),
         upload: resolve(__dirname, 'src/pages/upload.html'),
         'artist-register': resolve(__dirname, 'src/pages/artist-register.html'),
@@ -21,7 +20,7 @@ export default defineConfig({
     sourcemap: false,
   },
   server: {
-    port: 3000,
+    port: 3002,
     open: true,
     host: true,
   },

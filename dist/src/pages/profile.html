@@ -8,348 +8,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <style>
-        body {
-            padding-top: 80px;
-        }
-
-        .profile-main {
-            min-height: 100vh;
-            padding: 2rem 0;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .profile-header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .profile-content {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-        
-        .wallet-status {
-            display: flex;
-            align-items: center;
-            padding: 8px 16px;
-            background: #10b981;
-            color: white;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        .wallet-status::before {
-            content: "✓";
-            margin-right: 8px;
-        }
-        
-        .welcome-section {
-            text-align: center;
-            padding: 3rem 0;
-            background: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            margin-bottom: 2rem;
-        }
-        
-        .welcome-content h2 {
-            font-size: 2rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-        
-        .welcome-content p {
-            color: var(--text-dark);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        .profile-sidebar {
-            position: sticky;
-            top: 100px;
-        }
-
-        .profile-sidebar .card {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0 auto 1rem;
-        }
-
-        .profile-name {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-        }
-
-        .profile-address {
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            font-family: 'Courier New', monospace;
-            margin-bottom: 1.5rem;
-            word-break: break-all;
-        }
-
-        .profile-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            display: block;
-        }
-
-        .stat-label {
-            color: var(--text-dark);
-            font-size: 0.8rem;
-        }
-
-        .profile-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .profile-main-content {
-            min-height: 500px;
-        }
-
-        .artist-profile-form {
-            background: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .artist-profile-form h3 {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--background-light);
-            color: var(--text-light);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .form-control:disabled {
-            background: var(--background-dark);
-            color: var(--text-dark);
-            cursor: not-allowed;
-        }
-
-        .form-control::placeholder {
-            color: var(--text-dark);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .nft-section {
-            background: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
-        }
-
-        .nft-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .nft-card {
-            background: var(--background-light);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nft-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: var(--primary-color);
-        }
-
-        .nft-image {
-            width: 100%;
-            height: 150px;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .nft-info {
-            padding: 1rem;
-        }
-
-        .nft-name {
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-light);
-        }
-
-        .nft-price {
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-dark);
-        }
-
-        .empty-state h3 {
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .activity-section {
-            background: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .activity-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .activity-item:last-child {
-            border-bottom: none;
-        }
-
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: white;
-        }
-
-        .activity-details {
-            flex: 1;
-        }
-
-        .activity-title {
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 0.25rem;
-        }
-
-        .activity-time {
-            font-size: 0.8rem;
-            color: var(--text-dark);
-        }
-
-        @media (max-width: 768px) {
-            .profile-content {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .profile-sidebar {
-                position: static;
-            }
-
-            .profile-stats {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .profile-actions {
-                flex-direction: row;
-            }
-
-            .profile-header h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
-  <script type="module" crossorigin src="../../assets/profile-f3a327f4.js"></script>
-  <link rel="modulepreload" crossorigin href="../../assets/app-77b56577.js">
-  <link rel="stylesheet" href="../../assets/app-f1fc9b44.css">
+    
+  <script type="module" crossorigin src="../../assets/profile-678da00d.js"></script>
+  <link rel="modulepreload" crossorigin href="../../assets/wallet-connection-ab619167.js">
+  <link rel="modulepreload" crossorigin href="../../assets/user-store-1040f6a5.js">
+  <link rel="modulepreload" crossorigin href="../../assets/image-handler-91d970e9.js">
+  <link rel="stylesheet" href="../../assets/wallet-connection-f1fc9b44.css">
+  <link rel="stylesheet" href="../../assets/profile-ff75c47a.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -367,7 +32,9 @@
                 <li><a href="profile.html" class="active">Profile</a></li>
             </ul>
             <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
-            <button class="btn btn-primary" id="connectWallet" data-wallet-connect>Connect Wallet</button>
+            <div class="wallet-status" id="walletStatus">
+                <span id="walletAddress">Wallet Connected</span>
+            </div>
             
             <!-- Mobile Menu -->
             <div class="mobile-menu" id="mobileMenu">
@@ -376,7 +43,6 @@
                     <li><a href="gallery.html">Gallery</a></li>
                     <li><a href="upload.html">Create</a></li>
                     <li><a href="artist-register.html">Artists</a></li>
-                    <li><a href="member-artists.html">Members</a></li>
                     <li><a href="profile.html">Profile</a></li>
                 </ul>
             </div>
@@ -389,7 +55,6 @@
                 <h1>My Profile</h1>
             </div>
 
-            <!-- Welcome Section (shown when wallet not connected) -->
             <section id="welcomeSection" class="welcome-section" style="display: none;">
                 <div class="welcome-content">
                     <h2>Welcome to Your Profile</h2>
@@ -398,46 +63,23 @@
                 </div>
             </section>
 
-            <!-- Profile Content (shown when wallet connected) -->
             <section id="profileContent" class="profile-content" style="display: none;">
-                <!-- Profile Sidebar -->
                 <aside class="profile-sidebar">
                     <div class="card">
                         <div class="profile-avatar">
                             <span id="userInitials">?</span>
                         </div>
-                        <h2 class="profile-name" id="userName">Connect Wallet</h2>
+                        <h2 class="profile-name" id="userAddress">Connect Wallet</h2>
                         <p class="profile-address" id="userAddressDisplay">No address connected</p>
-                        
-                        <div class="profile-stats">
-                            <div class="stat-item">
-                                <span class="stat-value" id="nftCount">0</span>
-                                <span class="stat-label">NFTs Owned</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="createdCount">0</span>
-                                <span class="stat-label">Created</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="soldCount">0</span>
-                                <span class="stat-label">Sold</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="totalEarnings">0</span>
-                                <span class="stat-label">ETH Earned</span>
-                            </div>
-                        </div>
-                        
                         <div class="profile-actions">
-                            <a href="edit-profile.html" class="btn btn-primary">Edit Profile</a>
+                            <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                            <button class="btn btn-secondary" id="saveProfileBtn" style="display: none;">Save Changes</button>
                         </div>
                     </div>
                 </aside>
 
-                <!-- Main Content -->
                 <main class="profile-main-content">
-                    <!-- Edit Profile Form -->
-                    <div id="artistProfileForm" class="artist-profile-form" style="display: none;">
+                    <div id="artistProfileForm" class="card" style="display: none;">
                         <h3>Edit Artist Profile</h3>
                         <form id="profileForm">
                             <div class="form-group">
@@ -445,7 +87,7 @@
                                 <input type="text" id="artistName" class="form-control" placeholder="Enter your artist name" required>
                             </div>
                             <div class="form-group">
-                                <label for="artistBio">Artist Bio</label>
+                                <label for="artistBio">Artist Bio *</label>
                                 <textarea id="artistBio" class="form-control" rows="4" placeholder="Tell us about yourself and your art..."></textarea>
                             </div>
                             <div class="form-group">
@@ -456,7 +98,7 @@
                                 <label for="artistSocial">Social Media</label>
                                 <input type="text" id="artistSocial" class="form-control" placeholder="@yourusername">
                             </div>
-                            <div class="form-group">
+                             <div class="form-group">
                                 <label for="artistEmail">Email</label>
                                 <input type="email" id="artistEmail" class="form-control" placeholder="your@email.com">
                             </div>
@@ -467,25 +109,11 @@
                         </form>
                     </div>
 
-                    <!-- My NFTs Section -->
-                    <div class="nft-section">
-                        <h2 class="section-title">My NFTs</h2>
+                    <div class="nft-section card">
+                        <h2>My NFTs</h2>
                         <div id="userNFTGrid" class="nft-grid">
                             <div class="empty-state">
-                                <h3>No NFTs Found</h3>
                                 <p>You don't own any NFTs yet. Explore the gallery to start your collection!</p>
-                                <a href="gallery.html" class="btn btn-primary">Browse Gallery</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activity Section -->
-                    <div class="activity-section">
-                        <h2 class="section-title">Recent Activity</h2>
-                        <div id="activityList">
-                            <div class="empty-state">
-                                <h3>No Activity Yet</h3>
-                                <p>Your recent transactions and activities will appear here.</p>
                             </div>
                         </div>
                     </div>
@@ -494,7 +122,6 @@
         </div>
     </main>
 
-    
     
     
     
