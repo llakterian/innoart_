@@ -110,6 +110,17 @@
             background: rgba(99, 102, 241, 0.05);
         }
 
+        .image-preview.drag-over {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.02);
+        }
+
+        .image-preview.has-image {
+            border-style: solid;
+            border-color: var(--success-color);
+        }
+
         .upload-placeholder {
             text-align: center;
             color: var(--text-dark);
@@ -235,6 +246,62 @@
             transition: width 0.3s ease;
         }
 
+        .upload-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: none;
+        }
+
+        .upload-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .upload-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .upload-message.info {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Enhanced drag and drop styles */
+        .image-preview.drag-over::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            z-index: 1;
+        }
+
+        .image-preview.has-image .upload-placeholder {
+            display: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .upload-section {
                 padding: 1rem;
@@ -253,7 +320,7 @@
             }
         }
     </style>
-  <script type="module" crossorigin src="../../assets/upload-317becc2.js"></script>
+  <script type="module" crossorigin src="../../assets/upload-d8562a7f.js"></script>
   <link rel="modulepreload" crossorigin href="../../assets/multi-wallet-connector-0c891252.js">
   <link rel="modulepreload" crossorigin href="../../assets/user-store-6f34e326.js">
   <link rel="modulepreload" crossorigin href="../../assets/image-handler-91d970e9.js">

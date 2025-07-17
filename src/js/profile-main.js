@@ -410,8 +410,55 @@ class ProfileApp {
                 <button class="btn-toggle" onclick="profileApp.toggleNFTSale('${nft.id}')">
                     ${toggleText}
                 </button>
+                <button class="btn-delete" onclick="profileApp.deleteNFT('${nft.id}')">
+                    Delete NFT
+                </button>
             </div>
         `;
+    }
+    
+    deleteNFT(nftId) {
+        if (!this.currentUser) return;
+        
+        if (confirm('Are you sure you want to delete this NFT? This action cannot be undone.')) {
+            const success = this.userStore.deleteNFT(nftId, this.currentUser);
+            
+            if (success) {
+                // Show success message
+                this.showMessage('NFT deleted successfully', 'success');
+                
+                // Reload the NFTs to update the display
+                this.loadCreatedNFTs(this.currentUser);
+            } else {
+                this.showMessage('Failed to delete NFT. You can only delete NFTs that you created and haven\'t sold.', 'error');
+            }
+        }
+    }
+    
+    showMessage(message, type = 'info') {
+        // Create or update message element
+        let messageEl = document.getElementById('profileMessage');
+        if (!messageEl) {
+            messageEl = document.createElement('div');
+            messageEl.id = 'profileMessage';
+            messageEl.className = 'profile-message';
+            
+            const profileContent = document.querySelector('.profile-main-content');
+            if (profileContent) {
+                profileContent.insertBefore(messageEl, profileContent.firstChild);
+            }
+        }
+
+        messageEl.className = `profile-message ${type}`;
+        messageEl.textContent = message;
+        messageEl.style.display = 'block';
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (messageEl) {
+                messageEl.style.display = 'none';
+            }
+        }, 5000);
     }
 
     toggleNFTSale(nftId) {

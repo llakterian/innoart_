@@ -134,37 +134,64 @@ class UploadApp {
     async checkWalletConnection() {
         console.log('Upload: checkWalletConnection called');
         
-        // Check using direct wallet connection system
-        if (!(window.walletState && window.walletState.isConnected)) {
-            this.showConnectWalletPrompt();
+        // Wait for multi-wallet connector to be available
+        if (window.multiWalletConnector) {
+            this.updateWalletButton();
+            
+            // Listen for wallet connection events
+            window.addEventListener('walletConnected', (event) => {
+                console.log('Wallet connected in upload:', event.detail.address);
+                this.updateWalletButton();
+            });
+            
+            window.addEventListener('walletDisconnected', () => {
+                console.log('Wallet disconnected in upload');
+                this.updateWalletButton();
+            });
+        } else {
+            // Wait for the connector to load
+            setTimeout(() => {
+                this.checkWalletConnection();
+            }, 100);
         }
     }
 
     async handleWalletConnection() {
         console.log('Upload: handleWalletConnection called');
         
-        // Use the direct wallet connection system
-        if (window.walletState && window.walletState.isConnected) {
-            // Already connected, disconnect
-            if (window.disconnectWalletDirect) {
-                window.disconnectWalletDirect();
-            }
-            this.showConnectWalletPrompt();
-        } else {
-            // Not connected, try to connect
-            if (window.connectWalletDirect) {
-                try {
-                    await window.connectWalletDirect();
-                    // Check if connection was successful
-                    if (window.walletState && window.walletState.isConnected) {
-                        this.hideConnectWalletPrompt();
-                    }
-                } catch (error) {
-                    console.error('Upload: Wallet connection failed', error);
+        // Use the multi-wallet connector system
+        if (window.multiWalletConnector) {
+            try {
+                if (window.multiWalletConnector.getConnectionStatus()) {
+                    // Already connected, disconnect
+                    await window.multiWalletConnector.disconnect();
+                    this.updateWalletButton();
+                } else {
+                    // Not connected, try to connect
+                    await window.multiWalletConnector.showConnectionModal();
+                    this.updateWalletButton();
                 }
-            } else {
-                console.error('Upload: Direct wallet connection not available');
+            } catch (error) {
+                console.error('Upload: Wallet connection failed', error);
+                this.showMessage('Failed to connect wallet: ' + error.message, 'error');
             }
+        } else {
+            console.error('Upload: Multi-wallet connector not available');
+            this.showMessage('Wallet connection system not available', 'error');
+        }
+    }
+
+    updateWalletButton() {
+        const connectBtn = document.getElementById('connectWallet');
+        if (!connectBtn) return;
+
+        if (window.multiWalletConnector && window.multiWalletConnector.getConnectionStatus()) {
+            const address = window.multiWalletConnector.getWalletAddress();
+            connectBtn.textContent = `${address.slice(0, 6)}...${address.slice(-4)}`;
+            connectBtn.classList.add('connected');
+        } else {
+            connectBtn.textContent = 'Connect Wallet';
+            connectBtn.classList.remove('connected');
         }
     }
 
@@ -224,8 +251,14 @@ class UploadApp {
     }
 
     async handleMintNFT() {
-        // Check wallet connection
-        if (!(window.walletState && window.walletState.isConnected)) {
+        // Check wallet connection using the correct multi-wallet connector
+        if (!window.multiWalletConnector) {
+            this.showMessage('Wallet connection system not available. Please refresh the page.', 'error');
+            return;
+        }
+        
+        const isConnected = window.multiWalletConnector.getConnectionStatus();
+        if (!isConnected) {
             this.showMessage('Please connect your wallet first.', 'error');
             return;
         }
@@ -253,7 +286,7 @@ class UploadApp {
             return;
         }
 
-        const walletAddress = window.walletState.address;
+        const walletAddress = window.multiWalletConnector.getWalletAddress();
 
         // Check if user is registered as artist
         if (!window.userStore.isArtistRegistered(walletAddress)) {

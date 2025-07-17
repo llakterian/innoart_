@@ -174,6 +174,36 @@ class UserStore {
         return null;
     }
     
+    deleteNFT(id, walletAddress) {
+        const nft = this.getNFT(id);
+        if (!nft) return false;
+        
+        // Only the creator can delete their NFT
+        if (nft.creator !== walletAddress) return false;
+        
+        // Cannot delete if already sold
+        if (nft.sold) return false;
+        
+        // Get all NFTs and filter out the one to delete
+        const nfts = this.getNFTs();
+        const updatedNFTs = nfts.filter(item => item.id !== id);
+        
+        // Save the updated NFT list
+        localStorage.setItem(this.nftsKey, JSON.stringify(updatedNFTs));
+        
+        // Record deletion transaction
+        this.addTransaction({
+            type: 'nft_deleted',
+            walletAddress,
+            nftId: id,
+            timestamp: Date.now(),
+            status: 'completed',
+            description: `Deleted NFT "${nft.name}"`
+        });
+        
+        return true;
+    }
+    
     // Transaction Management
     addTransaction(transactionData) {
         const transactions = this.getTransactions();
