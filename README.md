@@ -206,15 +206,29 @@ npm run build
 
 1. **Create deployment package**
    ```bash
-   npm run build
-   cd dist
-   zip -r ../innoart-deployment.zip .
+   npm run deploy:netlify
    ```
 
 2. **Deploy to Netlify**
-   - Visit [Netlify](https://netlify.com)
-   - Drag and drop the zip file
+   - Visit [Netlify](https://netlify.com/drop)
+   - Drag and drop the `deploy/innoart-netlify.zip` file
    - Configure custom domain (optional)
+
+### Deploy to GitHub Pages
+
+1. **Automatic Deployment**
+   - Push changes to the `main` branch
+   - GitHub Actions will automatically build and deploy to GitHub Pages
+
+2. **Manual Configuration**
+   - Go to your repository settings
+   - Navigate to "Pages" in the sidebar
+   - Under "Build and deployment", select "Deploy from a branch"
+   - Select the "gh-pages" branch and "/ (root)" folder
+   - Click "Save"
+
+3. **Access Your Site**
+   - Your site will be available at `https://[username].github.io/innoart_/`
 
 ### Deploy to Vercel
 
