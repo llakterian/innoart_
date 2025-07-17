@@ -11,7 +11,6 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
@@ -26,16 +25,10 @@ jobs:
         run: npm ci
         
       - name: Build for GitHub Pages 🔧
-        run: npm run deploy:github
+        run: npm run build:github
         
       - name: Deploy to GitHub Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: dist
-          branch: gh-pages
-          clean: true
-          
-      - name: Update deployment status 📊
-        run: |
-          echo "🚀 Deployment complete!"
-          echo "📝 Site is now available at https://llakterian.github.io/innoart_/"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
