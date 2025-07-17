@@ -2,7 +2,10 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig(({ mode }) => {
+  // Always use the repository name as base path for GitHub Pages
   const base = mode === 'github' ? '/innoart_/' : './';
+  
+  console.log(`Building with base path: ${base}`);
   
   return {
     base,

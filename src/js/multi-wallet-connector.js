@@ -38,7 +38,7 @@ class MultiWalletConnector {
                 mobile: true
             }
         };
-        
+
         this.state = {
             isConnected: false,
             isConnecting: false,
@@ -47,25 +47,25 @@ class MultiWalletConnector {
             chainId: null,
             provider: null
         };
-        
+
         this.init();
     }
-    
+
     async init() {
         console.log('🔗 Initializing Multi-Wallet Connector...');
-        
+
         // Check for existing connections
         await this.checkExistingConnections();
-        
+
         // Set up event listeners
         this.setupEventListeners();
-        
+
         // Update UI
         this.updateUI();
-        
+
         console.log('✅ Multi-Wallet Connector initialized');
     }
-    
+
     async checkExistingConnections() {
         // Check MetaMask
         if (typeof window.ethereum !== 'undefined') {
@@ -77,7 +77,7 @@ class MultiWalletConnector {
                     this.state.walletType = 'metamask';
                     this.state.provider = window.ethereum;
                     this.state.chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                    
+
                     console.log('🦊 Existing MetaMask connection found:', accounts[0]);
                     this.setupProviderListeners();
                 }
@@ -85,7 +85,7 @@ class MultiWalletConnector {
                 console.log('No existing MetaMask connection');
             }
         }
-        
+
         // Check for other wallet connections from localStorage
         const savedConnection = localStorage.getItem('wallet_connection');
         if (savedConnection && !this.state.isConnected) {
@@ -101,7 +101,7 @@ class MultiWalletConnector {
             }
         }
     }
-    
+
     async reconnectWallet(walletType) {
         try {
             switch (walletType) {
@@ -121,16 +121,16 @@ class MultiWalletConnector {
             console.error('Reconnection failed:', error);
         }
     }
-    
+
     setupEventListeners() {
         // Global click handler for wallet connection buttons
         document.addEventListener('click', (event) => {
             const target = event.target;
-            
+
             if (this.isWalletButton(target)) {
                 event.preventDefault();
                 event.stopPropagation();
-                
+
                 if (this.state.isConnected) {
                     this.showDisconnectModal();
                 } else {
@@ -139,7 +139,7 @@ class MultiWalletConnector {
             }
         });
     }
-    
+
     setupProviderListeners() {
         if (this.state.provider && this.state.walletType === 'metamask') {
             // Account changes
@@ -154,14 +154,14 @@ class MultiWalletConnector {
                     this.showMessage('Account switched successfully', 'success');
                 }
             });
-            
+
             // Chain changes
             this.state.provider.on('chainChanged', (chainId) => {
                 console.log('Chain changed:', chainId);
                 this.state.chainId = chainId;
                 this.updateUI();
             });
-            
+
             // Disconnect events
             this.state.provider.on('disconnect', (error) => {
                 console.log('Provider disconnected:', error);
@@ -169,7 +169,7 @@ class MultiWalletConnector {
             });
         }
     }
-    
+
     isWalletButton(element) {
         return (
             element.id === 'connectWallet' ||
@@ -179,7 +179,7 @@ class MultiWalletConnector {
             element.hasAttribute('data-wallet-connect')
         );
     }
-    
+
     showWalletModal() {
         const modal = document.createElement('div');
         modal.className = 'wallet-modal-overlay';
@@ -204,10 +204,10 @@ class MultiWalletConnector {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
         this.addWalletModalStyles();
-        
+
         // Add click handlers for wallet options
         modal.querySelectorAll('.wallet-option').forEach(option => {
             option.addEventListener('click', () => {
@@ -217,13 +217,13 @@ class MultiWalletConnector {
             });
         });
     }
-    
+
     generateWalletOptions() {
         return Object.entries(this.supportedWallets).map(([key, wallet]) => {
             const isAvailable = this.isWalletAvailable(key);
             const statusClass = isAvailable ? 'available' : 'unavailable';
             const statusText = isAvailable ? 'Available' : 'Install';
-            
+
             return `
                 <div class="wallet-option ${statusClass}" data-wallet="${key}">
                     <div class="wallet-icon">${wallet.icon}</div>
@@ -236,7 +236,7 @@ class MultiWalletConnector {
             `;
         }).join('');
     }
-    
+
     isWalletAvailable(walletType) {
         switch (walletType) {
             case 'metamask':
@@ -249,16 +249,16 @@ class MultiWalletConnector {
                 return typeof window.ethereum !== 'undefined';
         }
     }
-    
+
     async connectWallet(walletType) {
         if (this.state.isConnecting) {
             this.showMessage('Connection already in progress', 'info');
             return;
         }
-        
+
         this.state.isConnecting = true;
         this.updateUI();
-        
+
         try {
             switch (walletType) {
                 case 'metamask':
@@ -281,95 +281,95 @@ class MultiWalletConnector {
             this.updateUI();
         }
     }
-    
+
     async connectMetaMask() {
         if (typeof window.ethereum === 'undefined') {
             throw new Error('MetaMask not installed');
         }
-        
+
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        
+
         await this.handleConnection('metamask', window.ethereum, accounts[0], chainId);
     }
-    
+
     async connectWalletConnect() {
         // WalletConnect implementation would go here
         // For now, fall back to generic connection
         await this.connectGenericWallet('walletconnect');
     }
-    
+
     async connectCoinbase() {
         if (typeof window.ethereum !== 'undefined' && window.ethereum.isCoinbaseWallet) {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-            
+
             await this.handleConnection('coinbase', window.ethereum, accounts[0], chainId);
         } else {
             throw new Error('Coinbase Wallet not available');
         }
     }
-    
+
     async connectGenericWallet(walletType) {
         if (typeof window.ethereum === 'undefined') {
             const wallet = this.supportedWallets[walletType];
             window.open(wallet.downloadUrl, '_blank');
             throw new Error(`${wallet.name} not installed`);
         }
-        
+
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        
+
         await this.handleConnection(walletType, window.ethereum, accounts[0], chainId);
     }
-    
+
     async handleConnection(walletType, provider, address, chainId) {
         this.state.isConnected = true;
         this.state.walletAddress = address;
         this.state.walletType = walletType;
         this.state.provider = provider;
         this.state.chainId = chainId;
-        
+
         // Request signature for authentication
         try {
             const message = `Welcome to InnArt!\n\nSign this message to authenticate your wallet.\n\nTimestamp: ${new Date().toISOString()}\nAddress: ${address}`;
-            
+
             const signature = await provider.request({
                 method: 'personal_sign',
                 params: [message, address]
             });
-            
+
             // Store authentication data
             sessionStorage.setItem('wallet_signature', signature);
             sessionStorage.setItem('wallet_address', address);
             sessionStorage.setItem('wallet_auth_timestamp', Date.now().toString());
-            
+
             this.showMessage(`${this.supportedWallets[walletType].name} connected and authenticated!`, 'success');
         } catch (signError) {
             console.warn('Signature declined:', signError);
             this.showMessage(`${this.supportedWallets[walletType].name} connected (authentication signature declined)`, 'warning');
         }
-        
+
         // Save connection
         this.saveConnection();
-        
+
         // Set up provider listeners
         this.setupProviderListeners();
-        
+
         // Update UI
         this.updateUI();
-        
+
         // Trigger custom event
         window.dispatchEvent(new CustomEvent('walletConnected', {
-            detail: { 
-                address, 
-                chainId, 
+            detail: {
+                address,
+                chainId,
                 walletType,
-                provider: walletType 
+                provider: walletType
             }
         }));
     }
-    
+
     saveConnection() {
         const connectionData = {
             address: this.state.walletAddress,
@@ -377,10 +377,10 @@ class MultiWalletConnector {
             chainId: this.state.chainId,
             timestamp: Date.now()
         };
-        
+
         localStorage.setItem('wallet_connection', JSON.stringify(connectionData));
     }
-    
+
     showDisconnectModal() {
         const modal = document.createElement('div');
         modal.className = 'wallet-modal-overlay';
@@ -406,47 +406,47 @@ class MultiWalletConnector {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
         this.addWalletModalStyles();
     }
-    
+
     disconnect() {
         console.log('Disconnecting wallet...');
-        
+
         // Clear state
         this.state.isConnected = false;
         this.state.walletAddress = null;
         this.state.walletType = null;
         this.state.provider = null;
         this.state.chainId = null;
-        
+
         // Clear storage
         localStorage.removeItem('wallet_connection');
         sessionStorage.removeItem('wallet_signature');
         sessionStorage.removeItem('wallet_address');
         sessionStorage.removeItem('wallet_auth_timestamp');
-        
+
         // Update UI
         this.updateUI();
-        
+
         // Show message
         this.showMessage('Wallet disconnected', 'success');
-        
+
         // Trigger custom event
         window.dispatchEvent(new CustomEvent('walletDisconnected'));
     }
-    
+
     updateUI() {
         const buttons = this.getAllWalletButtons();
-        
+
         buttons.forEach(button => {
             if (!button) return;
-            
+
             try {
                 // Remove all state classes
                 button.classList.remove('btn-connected', 'btn-connecting');
-                
+
                 if (this.state.isConnecting) {
                     button.textContent = 'Connecting...';
                     button.disabled = true;
@@ -469,7 +469,7 @@ class MultiWalletConnector {
             }
         });
     }
-    
+
     getAllWalletButtons() {
         const selectors = [
             '#connectWallet',
@@ -478,19 +478,19 @@ class MultiWalletConnector {
             '.connect-wallet-btn',
             '[data-wallet-connect]'
         ];
-        
+
         const buttons = [];
         selectors.forEach(selector => {
             const elements = document.querySelectorAll(selector);
             elements.forEach(el => buttons.push(el));
         });
-        
+
         return buttons;
     }
-    
+
     handleConnectionError(error) {
         let errorMessage = 'Failed to connect wallet';
-        
+
         if (error.code === 4001) {
             errorMessage = 'Connection rejected by user';
         } else if (error.code === -32002) {
@@ -498,27 +498,27 @@ class MultiWalletConnector {
         } else if (error.message.includes('not installed')) {
             errorMessage = error.message;
         }
-        
+
         this.showMessage(errorMessage, 'error');
     }
-    
+
     formatAddress(address) {
         if (!address) return '';
         return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
     }
-    
+
     showMessage(message, type = 'info', duration = 5000) {
         console.log(`[${type.toUpperCase()}] ${message}`);
-        
+
         // Remove existing messages
         const existingMessages = document.querySelectorAll('.wallet-message');
         existingMessages.forEach(msg => msg.remove());
-        
+
         // Create new message
         const messageDiv = document.createElement('div');
         messageDiv.className = `wallet-message wallet-message-${type}`;
         messageDiv.textContent = message;
-        
+
         // Apply styles
         Object.assign(messageDiv.style, {
             position: 'fixed',
@@ -534,7 +534,7 @@ class MultiWalletConnector {
             transition: 'opacity 0.3s ease-in-out',
             opacity: '0'
         });
-        
+
         // Type-specific styles
         const typeStyles = {
             success: { background: '#10b981', color: 'white' },
@@ -542,16 +542,16 @@ class MultiWalletConnector {
             warning: { background: '#f59e0b', color: 'white' },
             info: { background: '#3b82f6', color: 'white' }
         };
-        
+
         Object.assign(messageDiv.style, typeStyles[type] || typeStyles.info);
-        
+
         document.body.appendChild(messageDiv);
-        
+
         // Fade in
         setTimeout(() => {
             messageDiv.style.opacity = '1';
         }, 100);
-        
+
         // Auto remove
         setTimeout(() => {
             messageDiv.style.opacity = '0';
@@ -562,10 +562,10 @@ class MultiWalletConnector {
             }, 300);
         }, duration);
     }
-    
+
     addWalletModalStyles() {
         if (document.getElementById('wallet-modal-styles')) return;
-        
+
         const styles = document.createElement('style');
         styles.id = 'wallet-modal-styles';
         styles.textContent = `
@@ -762,31 +762,31 @@ class MultiWalletConnector {
                 }
             }
         `;
-        
+
         document.head.appendChild(styles);
     }
-    
+
     // Public API methods
     getConnectionStatus() {
         return this.state.isConnected;
     }
-    
+
     getWalletAddress() {
         return this.state.walletAddress;
     }
-    
+
     getWalletType() {
         return this.state.walletType;
     }
-    
+
     getChainId() {
         return this.state.chainId;
     }
-    
+
     getProvider() {
         return this.state.provider;
     }
-    
+
     isConnecting() {
         return this.state.isConnecting;
     }

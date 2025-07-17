@@ -25,15 +25,15 @@ The project is configured with GitHub Actions for automatic deployment to GitHub
 
 **Configuration Files**:
 - `.github/workflows/deploy-gh-pages.yml`: GitHub Actions workflow
-- `scripts/deploy-gh-pages.js`: Build script for GitHub Pages
+- `vite.config.ts`: Configured to use the correct base path for GitHub Pages
 
 **Manual Deployment**:
 ```bash
 # Build for GitHub Pages
 npm run build:github
 
-# Deploy to GitHub Pages
-npm run deploy:github
+# Push to GitHub to trigger deployment
+git push origin main
 ```
 
 ### Netlify (Recommended)
@@ -84,8 +84,6 @@ The project can also be deployed to:
 - **Digital Ocean App Platform**
 - **Render**
 
-For detailed instructions on these platforms, refer to the [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md).
-
 ## 🔧 Environment Setup
 
 For any deployment platform, you'll need to set these environment variables:
@@ -127,8 +125,18 @@ After deploying, verify that:
 - **Missing Images**: Check asset paths and ensure they're relative to the base path
 - **Console Errors**: Use browser developer tools to identify specific issues
 
----
+## 🔐 Security Considerations
 
-For more detailed information on specific deployment options, refer to:
-- [GITHUB_PAGES_DEPLOYMENT.md](GITHUB_PAGES_DEPLOYMENT.md) for GitHub Pages
-- [DEPLOYMENT_OPTIMIZATION.md](DEPLOYMENT_OPTIMIZATION.md) for optimizing deployments
+1. **Keep environment variables secure**
+2. **Regularly update dependencies**
+3. **Implement proper authentication**
+4. **Use HTTPS everywhere**
+5. **Consider a Web Application Firewall (WAF)**
+
+## 🚀 Optimization Tips
+
+1. **Minimize bundle size** by removing unused dependencies
+2. **Optimize images** for faster loading
+3. **Use code splitting** for better performance
+4. **Implement caching strategies** for static assets
+5. **Enable compression** on your hosting platform
