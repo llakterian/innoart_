@@ -251,16 +251,36 @@ class UploadApp {
     }
 
     async handleMintNFT() {
-        // Check wallet connection using the correct multi-wallet connector
+        // Wait for multi-wallet connector to be available
+        let attempts = 0;
+        while (!window.multiWalletConnector && attempts < 10) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            attempts++;
+        }
+        
+        // Check if multi-wallet connector is available
         if (!window.multiWalletConnector) {
             this.showMessage('Wallet connection system not available. Please refresh the page.', 'error');
             return;
         }
         
+        // Check if wallet is connected
         const isConnected = window.multiWalletConnector.getConnectionStatus();
         if (!isConnected) {
             this.showMessage('Please connect your wallet first.', 'error');
-            return;
+            
+            // Show wallet connection modal
+            try {
+                await window.multiWalletConnector.showConnectionModal();
+                
+                // Check if connection was successful
+                if (!window.multiWalletConnector.getConnectionStatus()) {
+                    return; // User canceled or connection failed
+                }
+            } catch (error) {
+                console.error('Failed to show wallet connection modal:', error);
+                return;
+            }
         }
 
         // Get form data

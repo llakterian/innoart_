@@ -1,8 +1,11 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig({
-  base: './',
+export default defineConfig(({ command, mode }) => {
+  const base = mode === 'github' ? '/innoart_/' : './';
+  
+  return {
+  base,
   build: {
     outDir: 'dist',
     emptyOutDir: true,

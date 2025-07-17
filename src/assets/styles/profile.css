@@ -311,6 +311,22 @@ textarea.form-control {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background: var(--error-color);
+    color: white;
+}
+
+.btn-delete {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--error-color);
+    background: transparent;
+    color: var(--error-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
     margin-left: 0.5rem;
 }
 
