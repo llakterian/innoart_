@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InnArt - Revolutionary NFT Marketplace | Create, Trade & Collect Digital Art</title>
+    <meta name="description" content="Join InnArt, the premier NFT marketplace where artists earn 80% revenue share. Create, mint, and trade unique digital art on Ethereum blockchain. Start your NFT journey today!">
+    <meta name="keywords" content="NFT marketplace, digital art, blockchain, Ethereum, create NFT, buy NFT, sell NFT, crypto art, Web3, decentralized">
+    <meta property="og:title" content="InnArt - Revolutionary NFT Marketplace">
+    <meta property="og:description" content="Create, trade & collect unique digital art NFTs. Artists earn 80% revenue share on the most innovative blockchain marketplace.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/src/assets/images/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Revolutionary Homepage Design */
+        
+        /* Hero Section - Inspired by OpenSea & Foundation */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, 
+                rgba(15, 15, 35, 0.95) 0%, 
+                rgba(31, 41, 55, 0.9) 50%, 
+                rgba(15, 15, 35, 0.95) 100%);
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 8s; }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hero-content {
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-top: 0.25rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .hero-btn.primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .hero-btn.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .hero-btn.secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-btn.secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        /* Hero Visual - NFT Showcase */
+        .hero-visual {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nft-showcase {
+            position: relative;
+            width: 100%;
+            height: 600px;
+        }
+
+        .showcase-card {
+            position: absolute;
+            width: 280px;
+            height: 350px;
+            background: var(--card-background);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .showcase-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .showcase-card:nth-child(1) {
+            top: 50px;
+            left: 50px;
+            z-index: 3;
+            animation: cardFloat1 6s ease-in-out infinite;
+        }
+
+        .showcase-card:nth-child(2) {
+            top: 100px;
+            right: 30px;
+            z-index: 2;
+            animation: cardFloat2 6s ease-in-out infinite 2s;
+        }
+
+        .showcase-card:nth-child(3) {
+            bottom: 80px;
+            left: 100px;
+            z-index: 1;
+            animation: cardFloat3 6s ease-in-out infinite 4s;
+        }
+
+        @keyframes cardFloat1 {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        @keyframes cardFloat2 {
+            0%, 100% { transform: translateY(0px) rotate(-1deg); }
+            50% { transform: translateY(-20px) rotate(1deg); }
+        }
+
+        @keyframes cardFloat3 {
+            0%, 100% { transform: translateY(0px) rotate(1deg); }
+            50% { transform: translateY(-10px) rotate(-2deg); }
+        }
+
+        .card-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-artist {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .card-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-eth {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .price-usd {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        /* Trending Section - SuperRare Inspired */
+        .trending-section {
+            padding: 8rem 0;
+            background: var(--background-light);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .trending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .trending-card {
+            background: var(--card-background);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .trending-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .trending-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .trending-card:hover::before {
+            opacity: 1;
+        }
+
+        .trending-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #6366f1, #ec4899, #f59e0b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .trending-info {
+            padding: 2rem;
+        }
+
+        .trending-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .trending-artist {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .verified-badge {
+            width: 16px;
+            height: 16px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .trending-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+
+        /* Live Stats Section - Async Art Inspired */
+        .live-stats {
+            padding: 6rem 0;
+            background: var(--gradient-dark);
+            text-align: center;
+        }
+
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .stats-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-color);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Creator Spotlight */
+        .creator-spotlight {
+            padding: 8rem 0;
+        }
+
+        .spotlight-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .spotlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .spotlight-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .spotlight-content p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .creator-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .feature-text {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .creator-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .creator-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .creator-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .creator-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .creator-name {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .creator-earnings {
+            font-size: 0.9rem;
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.2rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-btn.white {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-btn.white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-btn.outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-btn.outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--background-light);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 4rem;
+            }
+            
+            .spotlight-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                justify-content: center;
+            }
+            
+            .hero-actions {
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .trending-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .creator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/innoart_/assets/main-2108bc91.js"></script>
+  <link rel="modulepreload" crossorigin href="/innoart_/assets/multi-wallet-connector-0c891252.js">
+  <link rel="stylesheet" href="/innoart_/assets/multi-wallet-connector-f1fc9b44.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">InnArt</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="src/pages/gallery.html">Gallery</a></li>
+                <li><a href="src/pages/upload.html">Create</a></li>
+                <li><a href="src/pages/artist-register.html">Artists</a></li>
+                <li><a href="src/pages/member-artists.html">Members</a></li>
+                <li><a href="src/pages/profile.html" id="profileLink">Profile</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+            <button class="btn btn-primary" id="connectWallet" data-wallet-connect>Connect Wallet</button>
+            
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="src/pages/gallery.html">Gallery</a></li>
+                    <li><a href="src/pages/upload.html">Create</a></li>
+                    <li><a href="src/pages/artist-register.html">Artists</a></li>
+                    <li><a href="src/pages/member-artists.html">Members</a></li>
+                    <li><a href="src/pages/profile.html" id="profileLinkMobile">Profile</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="hero-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+        </div>
+        
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>🚀 The Future of Digital Art</span>
+                </div>
+                <h1 class="hero-title">
+                    Create & Trade <span class="gradient-text">Extraordinary</span> Digital Art
+                </h1>
+                <p class="hero-subtitle">
+                    Join InnArt, the revolutionary NFT marketplace where artists earn 80% revenue share. 
+                    Mint, trade, and collect unique digital masterpieces on the Ethereum blockchain.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">10K+</span>
+                        <span class="hero-stat-label">NFTs Created</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">500+</span>
+                        <span class="hero-stat-label">Active Artists</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">250+</span>
+                        <span class="hero-stat-label">ETH Traded</span>
+                    </div>
+                </div>
+                
+                <div class="hero-actions">
+                    <a href="src/pages/gallery.html" class="hero-btn primary">
+                        <span>Explore Gallery</span>
+                        <span>→</span>
+                    </a>
+                    <a href="src/pages/artist-register.html" class="hero-btn secondary">
+                        <span>Become a Creator</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="nft-showcase">
+                    <div class="showcase-card">
+                        <div class="card-image">🎨</div>
+                        <div class="card-content">
+                            <div class="card-title">Cosmic Dreamscape</div>
+                            <div class="card-artist">by @DigitalDreamer</div>
+                            <div class="card-price">
+                                <span class="price-eth">2.5 ETH</span>
+                                <span class="price-usd">$4,250</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-card">
+                        <div class="card-image">🌟</div>
+                        <div class="card-content">
+                            <div class="card-title">Neon Genesis</div>
+                            <div class="card-artist">by @CryptoArtist</div>
+                            <div class="card-price">
+                                <span class="price-eth">1.8 ETH</span>
+                                <span class="price-usd">$3,060</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showcase-card">
+                        <div class="card-image">🖼️</div>
+                        <div class="card-content">
+                            <div class="card-title">Digital Renaissance</div>
+                            <div class="card-artist">by @PixelMaster</div>
+                            <div class="card-price">
+                                <span class="price-eth">3.2 ETH</span>
+                                <span class="price-usd">$5,440</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Section -->
+    <section class="trending-section">
+        <div class="section-header">
+            <div class="section-badge">Trending Now</div>
+            <h2 class="section-title">Discover Extraordinary Art</h2>
+            <p class="section-subtitle">Explore the most sought-after digital creations from top artists around the world</p>
+        </div>
+        
+        <div class="trending-grid">
+            <div class="trending-card">
+                <div class="trending-image">🎨</div>
+                <div class="trending-info">
+                    <h3 class="trending-title">Ethereal Dimensions</h3>
+                    <div class="trending-artist">
+                        <span>@DigitalDreamer</span>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="trending-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">5.2 ETH</span>
+                            <span class="stat-label">Current Bid</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">24h</span>
+                            <span class="stat-label">Remaining</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trending-card">
+                <div class="trending-image">🌟</div>
+                <div class="trending-info">
+                    <h3 class="trending-title">Quantum Resonance</h3>
+                    <div class="trending-artist">
+                        <span>@CryptoArtist</span>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="trending-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">3.8 ETH</span>
+                            <span class="stat-label">Current Bid</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">12h</span>
+                            <span class="stat-label">Remaining</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trending-card">
+                <div class="trending-image">🖼️</div>
+                <div class="trending-info">
+                    <h3 class="trending-title">Digital Renaissance</h3>
+                    <div class="trending-artist">
+                        <span>@PixelMaster</span>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="trending-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">4.5 ETH</span>
+                            <span class="stat-label">Current Bid</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">36h</span>
+                            <span class="stat-label">Remaining</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Stats Section -->
+    <section class="live-stats">
+        <div class="stats-container">
+            <h2 class="stats-title">InnArt Marketplace Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-icon">🎨</span>
+                    <span class="stat-number">10,000+</span>
+                    <span class="stat-label">NFTs Created</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">👨‍🎨</span>
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Active Artists</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-number">250+</span>
+                    <span class="stat-label">ETH Traded</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">🚀</span>
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Artist Satisfaction</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Spotlight -->
+    <section class="creator-spotlight">
+        <div class="spotlight-container">
+            <div class="spotlight-grid">
+                <div class="spotlight-content">
+                    <div class="section-badge">Creator Benefits</div>
+                    <h2>Why Artists Choose InnArt</h2>
+                    <p>Join thousands of successful digital creators earning from their art on our innovative platform.</p>
+                    
+                    <div class="creator-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">💰</div>
+                            <div class="feature-text">80% Revenue Share - Industry-leading earnings</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔒</div>
+                            <div class="feature-text">Secure Blockchain Technology</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🚀</div>
+                            <div class="feature-text">Marketing & Promotion Support</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-text">Advanced Analytics Dashboard</div>
+                        </div>
+                    </div>
+                    
+                    <a href="src/pages/artist-register.html" class="hero-btn primary">
+                        <span>Become a Creator</span>
+                        <span>→</span>
+                    </a>
+                </div>
+                
+                <div class="creator-grid">
+                    <div class="creator-card">
+                        <div class="creator-avatar">🎨</div>
+                        <div class="creator-name">@DigitalDreamer</div>
+                        <div class="creator-earnings">45.2 ETH earned</div>
+                    </div>
+                    <div class="creator-card">
+                        <div class="creator-avatar">🌟</div>
+                        <div class="creator-name">@CryptoArtist</div>
+                        <div class="creator-earnings">32.8 ETH earned</div>
+                    </div>
+                    <div class="creator-card">
+                        <div class="creator-avatar">🖼️</div>
+                        <div class="creator-name">@PixelMaster</div>
+                        <div class="creator-earnings">28.5 ETH earned</div>
+                    </div>
+                    <div class="creator-card">
+                        <div class="creator-avatar">🎭</div>
+                        <div class="creator-name">@ArtisticSoul</div>
+                        <div class="creator-earnings">21.3 ETH earned</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Start Your NFT Journey?</h2>
+            <p class="cta-subtitle">Join thousands of artists and collectors in the digital art revolution</p>
+            <div class="cta-buttons">
+                <a href="src/pages/gallery.html" class="cta-btn white">
+                    <span>Explore Gallery</span>
+                    <span>→</span>
+                </a>
+                <a href="src/pages/artist-register.html" class="cta-btn outline">
+                    <span>Become a Creator</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--background-light); padding: 3rem 0; text-align: center; border-top: 1px solid var(--border-color);">
+        <div class="container">
+            <div class="logo" style="margin-bottom: 1rem;">InnArt</div>
+            <p style="color: var(--text-dark); margin-bottom: 1rem;">Where Innovation Meets Art</p>
+            <p style="color: var(--text-dark); font-size: 0.9rem;">&copy; 2024 InnArt. All rights reserved. Built with ❤️ for the creative community.</p>
+        </div>
+    </footer>
+
+    
+    
+    
+</body>
+</html>

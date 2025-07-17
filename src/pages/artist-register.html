@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join as Creator - InnArt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .artist-main {
+            min-height: 100vh;
+            padding: 6rem 0 2rem;
+            position: relative;
+        }
+
+        .artist-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .artist-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .artist-hero p {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .artist-hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .registration-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .benefits-section {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .benefits-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .benefits-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            z-index: -1;
+        }
+
+        .benefits-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .benefits-list li::before {
+            content: '✨';
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .registration-form {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .registration-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .registration-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+            z-index: -1;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        .steps-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+            position: relative;
+        }
+
+        .steps-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: -1;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-background);
+            border: 3px solid var(--border-color);
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .form-step {
+            text-align: center;
+        }
+
+        .form-step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .form-step p {
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .registration-fee {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .fee-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .artist-showcase {
+            margin-top: 3rem;
+        }
+
+        .artist-showcase h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .artist-card {
+            text-align: center;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .artist-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            margin: 0 auto 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .artist-name {
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .artist-sales {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        /* New Innovative Design Styles */
+        .creator-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 0 4rem;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.1) 0%, 
+                rgba(236, 72, 153, 0.1) 50%, 
+                rgba(245, 158, 11, 0.1) 100%);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 200px;
+            height: 200px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 60%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .badge-icon {
+            font-size: 1.2rem;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .gradient-text {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .cta-button.primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .cta-button.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.6);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--border-color);
+        }
+
+        .cta-button.secondary:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .button-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .button-icon {
+            transform: translateX(3px);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 6rem 0;
+            background: var(--background-light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .step-card {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .step-icon {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .step-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .step-card p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .feature {
+            font-size: 0.9rem;
+            color: var(--success-color);
+            font-weight: 500;
+        }
+
+        /* Creator Benefits Section */
+        .creator-benefits {
+            padding: 6rem 0;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            align-items: center;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .benefits-content h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .benefits-content p {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .benefit-content h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .benefit-content p {
+            color: var(--text-dark);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .earnings-card {
+            background: var(--card-background);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card-header h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .period {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .earnings-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .currency {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        .earnings-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .label {
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .value {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .earnings-chart {
+            display: flex;
+            align-items: end;
+            gap: 0.5rem;
+            height: 60px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        /* Featured Creators */
+        .featured-creators {
+            padding: 6rem 0;
+            background: var(--background-light);
+        }
+
+        .creators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .creator-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .creator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .creator-avatar {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .avatar-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--success-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .creator-info h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+
+        .creator-info p {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .creator-stats {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        /* Registration Modal */
+        .registration-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-background);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--border-color);
+            color: var(--text-light);
+        }
+
+        .progress-container {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 33.33%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .progress-step span {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .registration-step {
+            display: none;
+            padding: 2rem;
+        }
+
+        .registration-step.active {
+            display: block;
+        }
+
+        .step-content {
+            text-align: center;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-content h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .step-content p {
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .step-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .step-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .step-button.secondary {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-light);
+        }
+
+        .step-button.secondary:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-help {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .step-help p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .step-help a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .step-help a:hover {
+            text-decoration: underline;
+        }
+
+        .fee-display {
+            background: var(--background-light);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .fee-amount {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .fee-usd {
+            font-size: 1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .fee-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .profile-form {
+            text-align: left;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--background-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .success {
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .creators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 1rem;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/innoart_/assets/artist-register-382643a9.js"></script>
+  <link rel="modulepreload" crossorigin href="/innoart_/assets/multi-wallet-connector-0c891252.js">
+  <link rel="modulepreload" crossorigin href="/innoart_/assets/blockchain-service-b14c66c5.js">
+  <link rel="modulepreload" crossorigin href="/innoart_/assets/user-store-1b0d5afd.js">
+  <link rel="stylesheet" href="/innoart_/assets/multi-wallet-connector-f1fc9b44.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="../../index.html" style="color: inherit; text-decoration: none;">InnArt</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="upload.html">Create</a></li>
+                <li><a href="artist-register.html" class="active">Artists</a></li>
+                <li><a href="member-artists.html">Members</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+            <button class="btn btn-primary" id="connectWallet">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video Background -->
+    <section class="creator-hero">
+        <div class="hero-background">
+            <div class="hero-gradient"></div>
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-icon">✨</span>
+                <span>Join 10,000+ Creators</span>
+            </div>
+            <h1 class="hero-title">
+                Turn Your Art Into
+                <span class="gradient-text">Digital Assets</span>
+            </h1>
+            <p class="hero-description">
+                Join InnArt's exclusive creator program and start earning from your digital art. 
+                Connect with collectors worldwide and build your creative empire.
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">$2.5M+</div>
+                    <div class="stat-label">Creator Earnings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">50K+</div>
+                    <div class="stat-label">NFTs Sold</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">80%</div>
+                    <div class="stat-label">Revenue Share</div>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <button class="cta-button primary" id="startRegistration">
+                    <span class="button-text">Start Creating</span>
+                    <span class="button-icon">→</span>
+                </button>
+                <button class="cta-button secondary" onclick="document.getElementById('howItWorks').scrollIntoView({behavior: 'smooth'})">
+                    <span class="button-text">How It Works</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="howItWorks">
+        <div class="container">
+            <div class="section-header">
+                <h2>How to Become a Creator</h2>
+                <p>Join thousands of artists earning from their digital creations</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">
+                        <div class="icon-circle">🔗</div>
+                        <div class="step-number">01</div>
+                    </div>
+                    <h3>Connect Your Wallet</h3>
+                    <p>Link your Ethereum wallet to get started. We support MetaMask, WalletConnect, Coinbase Wallet, and more.</p>
+                    <div class="step-features">
+                        <span class="feature">✓ Multi-wallet support</span>
+                        <span class="feature">✓ Secure connection</span>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <div class="icon-circle">💎</div>
+                        <div class="step-number">02</div>
+                    </div>
+                    <h3>Pay Creator Fee</h3>
+                    <p>One-time registration fee of 0.01 ETH to join our verified creator community and prevent spam.</p>
+                    <div class="step-features">
+                        <span class="feature">✓ One-time payment</span>
+                        <span class="feature">✓ Verified status</span>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">
+                        <div class="icon-circle">🎨</div>
+                        <div class="step-number">03</div>
+                    </div>
+                    <h3>Create & Earn</h3>
+                    <p>Set up your profile, upload your first NFT, and start earning 80% from every sale.</p>
+                    <div class="step-features">
+                        <span class="feature">✓ 80% revenue share</span>
+                        <span class="feature">✓ Instant payouts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Benefits -->
+    <section class="creator-benefits">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefits-content">
+                    <div class="section-badge">
+                        <span>Creator Perks</span>
+                    </div>
+                    <h2>Why Choose InnArt?</h2>
+                    <p>Join a platform built by creators, for creators. Get the tools and support you need to succeed.</p>
+                    
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">💰</div>
+                            <div class="benefit-content">
+                                <h4>80% Revenue Share</h4>
+                                <p>Keep more of what you earn with our industry-leading revenue split</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🚀</div>
+                            <div class="benefit-content">
+                                <h4>Marketing Support</h4>
+                                <p>Get featured in our newsletter, social media, and homepage showcases</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">📊</div>
+                            <div class="benefit-content">
+                                <h4>Advanced Analytics</h4>
+                                <p>Track your performance with detailed insights and sales data</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🤝</div>
+                            <div class="benefit-content">
+                                <h4>Creator Community</h4>
+                                <p>Connect with other artists and collaborate on exclusive projects</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="benefits-visual">
+                    <div class="earnings-card">
+                        <div class="card-header">
+                            <h4>Your Earnings</h4>
+                            <span class="period">This Month</span>
+                        </div>
+                        <div class="earnings-amount">
+                            <span class="currency">ETH</span>
+                            <span class="amount">12.45</span>
+                        </div>
+                        <div class="earnings-breakdown">
+                            <div class="breakdown-item">
+                                <span class="label">Sales (80%)</span>
+                                <span class="value">9.96 ETH</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="label">Royalties</span>
+                                <span class="value">2.49 ETH</span>
+                            </div>
+                        </div>
+                        <div class="earnings-chart">
+                            <div class="chart-bar" style="height: 60%"></div>
+                            <div class="chart-bar" style="height: 80%"></div>
+                            <div class="chart-bar" style="height: 45%"></div>
+                            <div class="chart-bar" style="height: 90%"></div>
+                            <div class="chart-bar" style="height: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Creators -->
+    <section class="featured-creators">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Our Top Creators</h2>
+                <p>Join successful artists already earning on InnArt</p>
+            </div>
+            <div class="creators-grid">
+                <div class="creator-card">
+                    <div class="creator-avatar">
+                        <div class="avatar-image">🎨</div>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="creator-info">
+                        <h4>@DigitalDreamer</h4>
+                        <p>Abstract Artist</p>
+                        <div class="creator-stats">
+                            <span>156 NFTs</span>
+                            <span>•</span>
+                            <span>45.2 ETH earned</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="creator-card">
+                    <div class="creator-avatar">
+                        <div class="avatar-image">🖼️</div>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="creator-info">
+                        <h4>@PixelMaster</h4>
+                        <p>Digital Illustrator</p>
+                        <div class="creator-stats">
+                            <span>89 NFTs</span>
+                            <span>•</span>
+                            <span>32.8 ETH earned</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="creator-card">
+                    <div class="creator-avatar">
+                        <div class="avatar-image">🌟</div>
+                        <div class="verified-badge">✓</div>
+                    </div>
+                    <div class="creator-info">
+                        <h4>@CryptoCanvas</h4>
+                        <p>3D Artist</p>
+                        <div class="creator-stats">
+                            <span>203 NFTs</span>
+                            <span>•</span>
+                            <span>67.1 ETH earned</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Modal -->
+    <div class="registration-modal" id="registrationModal" style="display: none;">
+        <div class="modal-overlay" onclick="closeRegistrationModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Join as Creator</h3>
+                <button class="close-btn" onclick="closeRegistrationModal()">&times;</button>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-steps">
+                    <div class="progress-step active" id="progressStep1">
+                        <div class="step-circle">1</div>
+                        <span>Connect</span>
+                    </div>
+                    <div class="progress-step" id="progressStep2">
+                        <div class="step-circle">2</div>
+                        <span>Pay Fee</span>
+                    </div>
+                    <div class="progress-step" id="progressStep3">
+                        <div class="step-circle">3</div>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Wallet Connection -->
+            <div class="registration-step active" id="step1">
+                <div class="step-content">
+                    <div class="step-icon">🔗</div>
+                    <h4>Connect Your Wallet</h4>
+                    <p>Choose your preferred wallet to get started. All Ethereum-compatible wallets are supported.</p>
+                    <button class="step-button" id="connectWalletStep">
+                        <span class="button-icon">🦊</span>
+                        <span>Connect Wallet</span>
+                    </button>
+                    <div class="step-help">
+                        <p>Don't have a wallet? <a href="https://ethereum.org/en/wallets/" target="_blank">Learn more</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Registration Fee -->
+            <div class="registration-step" id="step2">
+                <div class="step-content">
+                    <div class="step-icon">💎</div>
+                    <h4>Creator Registration Fee</h4>
+                    <p>One-time fee to join our verified creator community and maintain platform quality.</p>
+                    <div class="fee-display">
+                        <div class="fee-amount">0.01 ETH</div>
+                        <div class="fee-usd">≈ $25 USD</div>
+                    </div>
+                    <div class="fee-breakdown">
+                        <div class="breakdown-item">
+                            <span>Registration Fee</span>
+                            <span>0.01 ETH</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Network Fee</span>
+                            <span>~0.002 ETH</span>
+                        </div>
+                    </div>
+                    <button class="step-button" id="payFeeStep">
+                        <span class="button-icon">💳</span>
+                        <span>Pay Registration Fee</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Profile Setup -->
+            <div class="registration-step" id="step3">
+                <div class="step-content">
+                    <div class="step-icon">👤</div>
+                    <h4>Create Your Profile</h4>
+                    <p>Tell collectors about yourself and your artistic journey.</p>
+                    <form class="profile-form" id="creatorProfileForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Display Name *</label>
+                                <input type="text" id="creatorName" placeholder="Your artist name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Username *</label>
+                                <input type="text" id="creatorUsername" placeholder="@username" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Bio *</label>
+                            <textarea id="creatorBio" placeholder="Tell your story..." rows="4" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Website</label>
+                                <input type="url" id="creatorWebsite" placeholder="https://yoursite.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Twitter</label>
+                                <input type="text" id="creatorTwitter" placeholder="@handle">
+                            </div>
+                        </div>
+                        <button type="submit" class="step-button">
+                            <span class="button-icon">🎉</span>
+                            <span>Complete Registration</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Success Step -->
+            <div class="registration-step" id="stepSuccess">
+                <div class="step-content success">
+                    <div class="success-icon">🎉</div>
+                    <h4>Welcome to InnArt!</h4>
+                    <p>Your creator account is now active. Start uploading your first NFT and begin earning.</p>
+                    <div class="success-actions">
+                        <a href="upload.html" class="step-button">
+                            <span class="button-icon">🎨</span>
+                            <span>Create Your First NFT</span>
+                        </a>
+                        <a href="profile.html" class="step-button secondary">
+                            <span>View Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    
+    
+    
+    
+    
+    <script>
+        // Registration Modal Functionality
+        let currentStep = 1;
+        let walletConnected = false;
+        let registrationPaid = false;
+
+        function showRegistrationModal() {
+            document.getElementById('registrationModal').style.display = 'flex';
+            updateProgressBar();
+        }
+
+        function closeRegistrationModal() {
+            document.getElementById('registrationModal').style.display = 'none';
+        }
+
+        function updateProgressBar() {
+            const progressFill = document.getElementById('progressFill');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            
+            // Update progress bar width
+            progressFill.style.width = `${(currentStep / 3) * 100}%`;
+            
+            // Update step indicators
+            progressSteps.forEach((step, index) => {
+                step.classList.remove('active');
+                if (index + 1 <= currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.registration-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            
+            currentStep = stepNumber;
+            updateProgressBar();
+        }
+
+        function nextStep() {
+            if (currentStep < 3) {
+                showStep(currentStep + 1);
+            }
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start Registration button
+            document.getElementById('startRegistration').addEventListener('click', showRegistrationModal);
+            
+            // Connect Wallet Step
+            document.getElementById('connectWalletStep').addEventListener('click', async function() {
+                if (window.multiWalletConnector) {
+                    window.multiWalletConnector.showWalletModal();
+                }
+            });
+            
+            // Pay Fee Step
+            document.getElementById('payFeeStep').addEventListener('click', async function() {
+                if (!walletConnected) {
+                    alert('Please connect your wallet first');
+                    return;
+                }
+                
+                try {
+                    const walletAddress = window.multiWalletConnector.getWalletAddress();
+                    const blockchainService = window.blockchainService;
+                    
+                    if (blockchainService) {
+                        const result = await blockchainService.payRegistrationFee(walletAddress);
+                        if (result.success) {
+                            registrationPaid = true;
+                            nextStep();
+                        } else {
+                            alert('Payment failed: ' + result.error);
+                        }
+                    }
+                } catch (error) {
+                    alert('Payment failed: ' + error.message);
+                }
+            });
+            
+            // Profile Form Submission
+            document.getElementById('creatorProfileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const profileData = {
+                    name: document.getElementById('creatorName').value,
+                    username: document.getElementById('creatorUsername').value,
+                    bio: document.getElementById('creatorBio').value,
+                    website: document.getElementById('creatorWebsite').value,
+                    twitter: document.getElementById('creatorTwitter').value
+                };
+                
+                // Save profile data
+                const walletAddress = window.multiWalletConnector.getWalletAddress();
+                if (window.userStore && walletAddress) {
+                    window.userStore.registerArtist(walletAddress, profileData);
+                    document.getElementById('stepSuccess').classList.add('active');
+                    document.getElementById('step3').classList.remove('active');
+                }
+            });
+            
+            // Listen for wallet connection events
+            window.addEventListener('walletConnected', function(event) {
+                walletConnected = true;
+                if (currentStep === 1) {
+                    nextStep();
+                }
+            });
+            
+            window.addEventListener('walletDisconnected', function() {
+                walletConnected = false;
+                if (currentStep > 1) {
+                    showStep(1);
+                }
+            });
+        });
+
+        // Global functions for onclick handlers
+        window.showRegistrationModal = showRegistrationModal;
+        window.closeRegistrationModal = closeRegistrationModal;
+    </script>
+</body>
+</html>
